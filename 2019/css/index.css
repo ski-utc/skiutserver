@@ -1,0 +1,490 @@
+/*!
+ * Start Bootstrap - Grayscale v5.0.2 (https://startbootstrap.com/template-overviews/grayscale)
+ * Copyright 2013-2018 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-grayscale/blob/master/LICENSE)
+ */
+/********************** COLORS ************************/
+/******************************************************/
+/******************** MEDIA SIZES *********************/
+/******************************************************/
+/******************** FONTS *********************/
+@font-face {
+  font-family: "Acherus";
+  src: url("fonts/Acherus/acherus.eot");
+  src: url("fonts/Acherus/acherus.woff") format("woff"), url("fonts/Acherus/acherus.otf") format("opentype"), url("fonts/Acherus/acherus.svg#filename") format("svg");
+}
+@font-face {
+  font-family: "Museo";
+  src: url("fonts/MuseoSans_500/MuseoSans_500-webfont.eot");
+  src: url("fonts/MuseoSans_500/MuseoSans_500-webfont.woff") format("woff"), url("fonts/MuseoSans_500/MuseoSans_500-webfont.otf") format("opentype"), url("fonts/MuseoSans_500/MuseoSans_500-webfont.svg#filename") format("svg");
+}
+@font-face {
+  font-family: "Lithos";
+  src: url("fonts/Lithos_Pro/LithosPro-Black.eot");
+  src: url("fonts/Lithos_Pro/LithosPro-Black.woff") format("woff"), url("fonts/Lithos_Pro/LithosPro-Black.otf") format("opentype"), url("fonts/Lithos_Pro/LithosPro-Black.svg#filename") format("svg");
+}
+/******************************************************/
+/********************** GENERAL ************************/
+* {
+  font-family: "Acherus", Helvetica, Sans-serif;
+}
+
+/******************************************************/
+/********************** MIXINS ************************/
+.parallax-container {
+  position: relative;
+}
+
+.parallax-images {
+  background-image: url("../images/homepaper.jpg");
+  background-size: cover;
+  height: 140%;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+/******************************************************/
+/********************** HEADER ************************/
+.header {
+  padding: 15rem 0;
+}
+.header h1 {
+  font-size: 2.5rem;
+  color: #272E40;
+  font-family: "Lithos", Helvetica, Sans-serif;
+}
+.header .home-logo {
+  width: 50%;
+}
+.header .arrow {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 5%;
+  height: 5%;
+  margin-top: 5rem;
+}
+@media (min-width: 768px) {
+  .header {
+    height: 40rem;
+  }
+  .header h1 {
+    font-size: 4rem;
+    line-height: 4rem;
+  }
+}
+@media (min-width: 992px) {
+  .header {
+    height: 100vh;
+    padding: 0;
+  }
+  .header h1 {
+    font-size: 4rem;
+    padding-top: 2rem;
+  }
+  .header .home-logo {
+    margin-top: 3rem;
+    width: 35%;
+  }
+}
+
+/********************** ///// ************************/
+/********************** VOYAGE ************************/
+.voyage-section {
+  background-color: #eff5ff;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.voyage-section p {
+  margin-bottom: 5rem;
+}
+.voyage-section h2 {
+  padding-bottom: 1rem;
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #0364a0;
+}
+.voyage-section h2.dates {
+  padding-top: 0;
+}
+@media (min-width: 768px) {
+  .voyage-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+@media (min-width: 992px) {
+  .voyage-section .img-left {
+    margin-left: -5rem;
+  }
+  .voyage-section .img-right {
+    margin-right: -5rem;
+  }
+  .voyage-section h2 {
+    padding-bottom: 2rem;
+  }
+}
+
+/********************** ///// ************************/
+/********************** COUNTDOWN ************************/
+#countdown {
+  background-color: #303030;
+  color: white;
+}
+#countdown h2 {
+  padding-top: 3rem;
+}
+#countdown p {
+  margin-bottom: 0 !important;
+}
+#countdown ul {
+  margin: 0;
+}
+#countdown ul li {
+  display: inline-block;
+  font-size: 1.5em;
+  list-style-type: none;
+  padding: 1em;
+  text-transform: uppercase;
+}
+#countdown ul li span {
+  display: block;
+  font-size: 4.5rem;
+}
+
+/********************** ///// ************************/
+/********************** TEAM ************************/
+.team {
+  background-color: #1ca8ff;
+  padding-bottom: 2rem;
+}
+.team h2 {
+  color: #eff5ff;
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/********************** ///// ************************/
+/********************** TARIFS ************************/
+#tarifs {
+  padding-top: 2rem;
+  background-color: white;
+  padding-bottom: 2rem;
+}
+#tarifs h2 {
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #0364a0;
+}
+#tarifs h3 {
+  padding-bottom: 1rem;
+  font-size: 1.4rem;
+}
+#tarifs .ski-packs .ski-price {
+  border: 1px solid #eff5ff;
+  border-radius: 20px;
+  padding: 5rem 0;
+  transition: 0.5s;
+  box-shadow: 0 0 20px #eee;
+  background-size: 200% auto;
+  color: white;
+}
+#tarifs .ski-packs .ski-price:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+  box-shadow: 0 0 12px rgba(33, 33, 33, 0.3);
+}
+#tarifs .ski-packs .price-o {
+  background-image: linear-gradient(to top right, #edb409 0%, #ffcf23 50%, #edb409 100%);
+}
+#tarifs .ski-packs .price-a {
+  background-image: linear-gradient(to top right, #a09c97 0%, #a3abb7 50%, #a09c97 100%);
+}
+#tarifs .ski-packs .price-b {
+  background-image: linear-gradient(to top right, #cd7f32 0%, #dca570 50%, #cd7f32 100%);
+}
+@media (max-width: 968px) {
+  #tarifs h3 {
+    font-size: 1.2rem;
+  }
+  #tarifs p {
+    font-size: 0.8rem;
+  }
+}
+@media (min-width: 968px) {
+  #tarifs .card {
+    margin: 2rem;
+  }
+}
+
+/********************** ///// ************************/
+/********************** STATION ************************/
+#station {
+  padding-top: 2rem;
+  background: linear-gradient(62deg, #1ca8ff, #faac2e);
+  background-size: 600% 600%;
+  -webkit-animation: backgroundChange 22s ease infinite;
+  -moz-animation: backgroundChange 22s ease infinite;
+  -o-animation: backgroundChange 22s ease infinite;
+  animation: backgroundChange 22s ease infinite;
+  padding-bottom: 2rem;
+}
+@-webkit-keyframes backgroundChange {
+  0% {
+    background-position: 0% 91%;
+  }
+  50% {
+    background-position: 100% 10%;
+  }
+  100% {
+    background-position: 0% 91%;
+  }
+}
+@-moz-keyframes backgroundChange {
+  0% {
+    background-position: 0% 91%;
+  }
+  50% {
+    background-position: 100% 10%;
+  }
+  100% {
+    background-position: 0% 91%;
+  }
+}
+@-o-keyframes backgroundChange {
+  0% {
+    background-position: 0% 91%;
+  }
+  50% {
+    background-position: 100% 10%;
+  }
+  100% {
+    background-position: 0% 91%;
+  }
+}
+@keyframes backgroundChange {
+  0% {
+    background-position: 0% 91%;
+  }
+  50% {
+    background-position: 100% 10%;
+  }
+  100% {
+    background-position: 0% 91%;
+  }
+}
+#station h2 {
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #eff5ff;
+}
+#station p {
+  font-size: 1.4rem;
+  color: #eff5ff;
+}
+
+.circle {
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 100%;
+  font-size: 1rem;
+  color: white;
+  line-height: 1rem;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid white;
+  align-items: center;
+  display: flex;
+}
+
+/********************** ///// ************************/
+/********************** TRAILER ************************/
+#trailer {
+  background-color: #1ca8ff;
+  padding-bottom: 2rem;
+}
+#trailer h2 {
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #eff5ff;
+}
+#trailer .trailer-wrapper {
+  width: 600px;
+  max-width: 100%;
+}
+#trailer .trailer-frame {
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+  overflow: hidden;
+}
+#trailer .trailer-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+@media (min-width: 768px) {
+  #trailer {
+    padding-bottom: 4rem;
+  }
+}
+@media (min-width: 968px) {
+  #trailer {
+    padding-top: 3rem;
+  }
+}
+
+/********************** ///// ************************/
+/********************** CONNEXION ************************/
+.signup-section {
+  padding: 5rem 0;
+  background: white;
+}
+.signup-section h2 {
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #0364a0;
+}
+
+.signup-section .button {
+  background-color: #1ca8ff;
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  text-align: center;
+  cursor: pointer;
+  font-size: 2rem;
+  border: none;
+  border-radius: 12px;
+  color: white;
+}
+
+.signup-section .button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+/********************** ///// ************************/
+/********************** SPONSORS ************************/
+.sponso-section {
+  padding-top: 2rem;
+  background-color: white;
+}
+.sponso-section h2 {
+  font-family: "Museo", "Acherus", Helvetica, Sans-serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #0364a0;
+}
+.sponso-section p {
+  font-size: 1.4rem;
+}
+.sponso-section .sponsor-logos .logo {
+  width: 15rem;
+}
+@media (min-width: 768px) {
+  .sponso-section {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/********************** ///// ************************/
+/********************** FOOTER ************************/
+footer {
+  padding: 2rem 0;
+  background-color: #303030;
+  color: white;
+  cursor: url(http://cur.cursors-4u.net/others/oth-2/oth133.cur), auto !important;
+}
+
+/*************** BUTTONS EFFECTS ********************/
+#mainNav {
+  min-height: 56px;
+  background-color: #fff;
+}
+#mainNav .navbar-toggler {
+  font-size: 80%;
+  padding: 0.75rem;
+  color: #64a19d;
+  border: 1px solid #64a19d;
+}
+#mainNav .navbar-toggler:focus {
+  outline: none;
+}
+#mainNav .navbar-brand {
+  color: #161616;
+  font-weight: 700;
+  padding: 0.9rem 0;
+}
+#mainNav .navbar-nav .nav-item:hover {
+  color: fade(white, 80%);
+  outline: none;
+  background-color: transparent;
+}
+#mainNav .navbar-nav .nav-item:active, #mainNav #mainNav .navbar-nav .nav-item:focus {
+  outline: none;
+  background-color: transparent;
+}
+@media (min-width: 992px) {
+  #mainNav {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    background-color: transparent;
+    -webkit-transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+  }
+  #mainNav .navbar-brand {
+    padding: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  #mainNav .nav-link {
+    -webkit-transition: none;
+    transition: none;
+    padding: 2rem 1.5rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  #mainNav .nav-link:hover {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  #mainNav .nav-link:active {
+    color: white;
+  }
+  #mainNav.navbar-shrink {
+    background-color: #fff;
+  }
+  #mainNav.navbar-shrink .navbar-brand {
+    color: #129CF3;
+  }
+  #mainNav.navbar-shrink .nav-link {
+    color: #129CF3;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 0.25rem solid transparent;
+  }
+  #mainNav.navbar-shrink .nav-link:hover {
+    color: #aae3ef;
+  }
+  #mainNav.navbar-shrink .nav-link:active {
+    color: #129CF3;
+  }
+  #mainNav.navbar-shrink .nav-link.active {
+    color: #aae3ef;
+    outline: none;
+    border-bottom: 0.25rem solid #aae3ef;
+  }
+}
+
+/*# sourceMappingURL=index.css.map */
