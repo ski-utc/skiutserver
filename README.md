@@ -3,7 +3,7 @@ Backend de ski utc
 
 ## TODO
 
-- Refactoring du setup de base
+- Refactoring du setup de base => passage en python ce semestre
 
 - Page d'accueil
 - Tombola
@@ -39,3 +39,13 @@ $ ssh root@51.75.200.68
 
 Le serveur possède la version 10 de Node, serveur Apache2 et MySQL consultable depuis `51.75.200.68/phpmyadmin`
 La base de données locale contient une trace des transactions effectuées avec payutc.
+
+## Python
+Liste des choses à prévoir pour l'API : 
++ Connexion à la BDO
++ Login cas, login tremplin
++ Logout
++ Calcul des options pour un user ( cours, pack, bouf etc )
++ Shotgun ( pack, chambre et physique)
++ Tombola
+
