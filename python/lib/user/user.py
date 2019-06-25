@@ -7,20 +7,28 @@ class User():
     """
 
     def __init__(self, login):
-        conn = pymysql.connect(host=_DB_HOST, db=_DB_NAME, user=_DB_USER, password=_DB_PASSWORD,
-                               connect_timeout=15000)
-
         self.login = login
-
-
-    def build_user_from_login(self, username):
-        return User(username)
 
     def get_login(self):
         return self.login
 
+    def get_user_info(self):
+        conn = pymysql.connect(host=_DB_HOST, db=_DB_NAME, user=_DB_USER, password=_DB_PASSWORD,
+                               connect_timeout=15000)
+
+        return None
+
+    @staticmethod
+    def build_user_from_login(username):
+        return User(username)
+
     @staticmethod
     def login(username=None, password=None):
+        #@TODO //Check BDD si user is tremplin, then login tremplin
+
+
+
+        #else connexion CAS
         headerscas = {
             'Content-type': 'application/x-www-form-urlencoded',
             'Accept': 'text/plain',
