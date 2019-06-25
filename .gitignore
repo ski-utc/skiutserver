@@ -1,0 +1,8 @@
+python/lib/config/urls.py
+.idea/
+
+
+python/lib/__pycache__
+python/lib/config/__pycache__
+python/lib/user/__pycache__
+python/lib/webapis/__pycache__

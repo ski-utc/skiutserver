@@ -49,3 +49,27 @@ Liste des choses à prévoir pour l'API :
 + Shotgun ( pack, chambre et physique)
 + Tombola
 
+
+setup : 
+pip install bottle
+
+
+Apache2 et mod_wsgi : 
+une .conf 
+````buildoutcfg
+<VirtualHost *:80>
+    ServerName assos.utc.fr
+
+    WSGIDaemonProcess skiutserver user=_www group=_www processes=1 threads=5
+    WSGIScriptAlias /v1 //!-PathToDefine-!//skiutserver/bottle.wsgi
+
+    <Directory /!-PathToDefine-!/skiutserver>
+        WSGIProcessGroup skiutserver
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>
+````
+
+un .wsgi

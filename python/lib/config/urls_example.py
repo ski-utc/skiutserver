@@ -1,0 +1,5 @@
+_CAS_URL = ""
+_SKIUTC_SERVICE = ""
+
+_GINGER_URL = ""
+_GINGER_KEY = ""
