@@ -1,5 +1,5 @@
 import requests
-from config.urls import _CAS_URL, _GINGER_URL, _SKIUTC_SERVICE
+from config.urls import _CAS_URL, _GINGER_URL, _SKIUTC_SERVICE, _DB_PASSWORD, _DB_HOST, _DB_USER, _DB_NAME
 
 class User():
     """
@@ -7,7 +7,17 @@ class User():
     """
 
     def __init__(self, login):
+        conn = pymysql.connect(host=_DB_HOST, db=_DB_NAME, user=_DB_USER, password=_DB_PASSWORD,
+                               connect_timeout=15000)
+
         self.login = login
+
+
+    def build_user_from_login(self, username):
+        return User(username)
+
+    def get_login(self):
+        return self.login
 
     @staticmethod
     def login(username=None, password=None):
