@@ -1,10 +1,8 @@
 from bottle import request, response
-from bottle import post, get
-
+from bottle import post, get, route
 from user.user import User
 
 import json
-
 
 @get('/test')
 def test():
@@ -13,12 +11,14 @@ def test():
     return json.dumps({"skiutc":"skiutc"})
 
 
-@post('/login')
+@route('/login', method=['OPTIONS', 'POST'])
 def loginCas():
     """
     end point login cas
     :return:
     """
+    if request.method == 'OPTIONS':
+        return {}
     try:
         try:
             data = json.loads(request.body.read())
