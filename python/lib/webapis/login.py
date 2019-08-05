@@ -27,9 +27,10 @@ def login_cas():
         if data is None or not data.get("username") or not data.get("password"):
             raise ValueError
 
-        user = User.login(data["username"], data["password"])
+        user = User.build_user_from_login(data["username"])
+        user_log = User.login(data["username"], data["password"])
 
-        if not user.get("ticket"):
+        if not user_log.get("ticket"):
             raise KeyError
 
     except ValueError:
@@ -44,23 +45,12 @@ def login_cas():
     response.status = 200
     response.headers['Content-Type'] = 'application/json'
 
-    return user
+    info_user = user.get_user_info()
 
-
-@route('/infoUser', method=['OPTIONS', 'GET'])
-def info_user():
-    if request.method == 'OPTIONS':
-        return {}
-
-    try:
-         data = json.loads(request.body.read())
-    except:
-         raise ValueError
-
-    user = User.build_user_from_login(data["login"])
-    infos = user.get_user_info()
-
-    response.status = 200
-    response.headers['Content-Type'] = 'application/json'
-
-    return infos
+    if info_user is None:
+        user_return = {
+            "login": user_log.get("login")
+        }
+        return user_return
+    else:
+        return info_user
