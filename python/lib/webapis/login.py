@@ -12,7 +12,7 @@ def test():
 
 
 @route('/login', method=['OPTIONS', 'POST'])
-def loginCas():
+def login_cas():
     """
     end point login cas
     :return:
@@ -47,7 +47,20 @@ def loginCas():
     return user
 
 
-@get('/infoUser')
-def infoUser():
+@route('/infoUser', method=['OPTIONS', 'GET'])
+def info_user():
+    if request.method == 'OPTIONS':
+        return {}
 
-    return None
+    try:
+         data = json.loads(request.body.read())
+    except:
+         raise ValueError
+
+    user = User.build_user_from_login(data["login"])
+    infos = user.get_user_info()
+
+    response.status = 200
+    response.headers['Content-Type'] = 'application/json'
+
+    return infos
