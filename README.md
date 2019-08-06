@@ -1,7 +1,6 @@
 # skiutserver
-Backend de ski utc
 
-## SPECS
+Backend de ski utc
 
 ### Meta
 
@@ -20,6 +19,10 @@ dans la  bdd skiut
 ### Espace utilisateur
 
 Dans User, insertion des info liés à la personne ( taille de chaussures, etc...)
+
+### Shotgun
+
+Module destiné au shotgun
 
 ### Choix des animation/viennoiseries + payutc
 
