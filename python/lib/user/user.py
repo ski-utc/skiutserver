@@ -1,6 +1,6 @@
 import requests
-from config.urls import _CAS_URL, _GINGER_URL, _SKIUTC_SERVICE, _DB_PASSWORD, _DB_HOST, _DB_USER, _DB_NAME
-import pymysql
+from db import dbskiut_con
+from config.urls import _SKIUTC_SERVICE, _CAS_URL
 
 class User():
     """
@@ -15,7 +15,7 @@ class User():
         return self.login
 
     def get_user_info(self):
-        con = pymysql.connect(host=_DB_HOST, db=_DB_NAME, user=_DB_USER, password=_DB_PASSWORD, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        con = dbskiut_con()
         with con:
             cur = con.cursor()
             sql = "SELECT * from users_2019 WHERE login=%s"
@@ -29,10 +29,20 @@ class User():
 
     @staticmethod
     def build_user_from_login(username):
+        """
+        Create a new User object
+        :param username: login of user
+        :return: User object
+        """
         return User(username)
 
     @staticmethod
     def login(username=None, password=None):
+        """
+        :param username: login
+        :param password:
+        :return: user information or login if not in skiutcs db
+        """
         #@TODO //Check BDD si user is tremplin, then login tremplin
 
         #else connexion CAS
