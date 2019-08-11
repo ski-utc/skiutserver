@@ -1,6 +1,6 @@
 python/lib/config/urls.py
 .idea/
-
+env
 
 python/lib/__pycache__
 python/lib/config/__pycache__
