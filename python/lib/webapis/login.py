@@ -1,10 +1,8 @@
 from bottle import request, response
-from bottle import post, get
-
+from bottle import post, get, route
 from user.user import User
 
 import json
-
 
 @get('/test')
 def test():
@@ -13,12 +11,14 @@ def test():
     return json.dumps({"skiutc":"skiutc"})
 
 
-@post('/login')
-def loginCas():
+@route('/login', method=['OPTIONS', 'POST'])
+def login_cas():
     """
     end point login cas
     :return:
     """
+    if request.method == 'OPTIONS':
+        return {}
     try:
         try:
             data = json.loads(request.body.read())
@@ -27,9 +27,10 @@ def loginCas():
         if data is None or not data.get("username") or not data.get("password"):
             raise ValueError
 
-        user = User.login(data["username"], data["password"])
+        user = User.build_user_from_login(data["username"])
+        user_log = User.login(data["username"], data["password"])
 
-        if not user.get("ticket"):
+        if not user_log.get("ticket"):
             raise KeyError
 
     except ValueError:
@@ -44,10 +45,12 @@ def loginCas():
     response.status = 200
     response.headers['Content-Type'] = 'application/json'
 
-    return user
+    info_user = user.get_user_info()
 
-
-@get('/infoUser')
-def infoUser():
-
-    return None
+    if info_user is None:
+        user_return = {
+            "login": user_log.get("login")
+        }
+        return user_return
+    else:
+        return info_user
