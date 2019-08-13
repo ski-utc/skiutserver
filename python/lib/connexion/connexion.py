@@ -72,6 +72,7 @@ class ConnexionHandler:
 
     def create_connexion(self):
         con = dbskiut_con()
+        con.begin()
         with con:
             cur = con.cursor()
             sql = "SELECT * FROM auth WHERE login=%s"
@@ -110,7 +111,11 @@ class ConnexionHandler:
                     return None
                 finally:
                     cur.close()
-                return user_in_db
+                return {
+                    "login": sql_tuples[2],
+                    "token": sql_tuples[0],
+                    "validity": sql_tuples[1]
+                }
 
     def update_connexion(self):
         con = dbskiut_con()
