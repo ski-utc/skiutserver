@@ -16,13 +16,13 @@ def authenticate(f):
         auth = request.headers.get('Authorization')
         if auth is None:
             response.status = 401
-            response.status = '401 You are not logged in !'
+            response.message = '401 You are not logged in !'
             return json.dumps({"error": "NOT LOGGED NO TOKEN"})
 
         user_auth_inst = ConnexionHandler.is_authenticated(token=auth)
         if user_auth_inst is None:
             response.status = 401
-            response.status = '401 You are not logged in !'
+            response.message = '401 You are not logged in !'
             return json.dumps({"error": "NOT LOGGED"})
         return f(*args, **kwargs)
     return wrapper
