@@ -1,11 +1,5 @@
-from bottle import run, get, hook, response
-from webapis import login
-
-
-@get('/')
-def home():
-    '''first route'''
-    return '<h1>Hello to SKIUTC Server</h1>'
+from bottle import run, get, hook, response, route
+from webapis import login, meta
 
 @hook('after_request')
 #@bottle.route('/:#.*#', method='OPTIONS')  # Also tried old syntax.
@@ -16,8 +10,12 @@ def enableCORSGenericRoute():
     """
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token, Authorization'
 
+@route('/', method = 'OPTIONS')
+@route('/<path:path>', method = 'OPTIONS')
+def options_handler(path = None):
+    return
 
 if __name__ == '__main__':
     run(host='localhost', port=8000, debug=True, reloader=True)
