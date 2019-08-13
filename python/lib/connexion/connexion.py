@@ -147,5 +147,9 @@ class ConnexionHandler:
                     return False
                 finally:
                     cur.close()
-                return user_in_db
+                return {
+                    "login": user_in_db["login"],
+                    "token": sql_tuples[1],
+                    "validity": sql_tuples[0]
+                }
 
