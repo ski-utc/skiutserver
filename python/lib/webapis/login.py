@@ -57,3 +57,12 @@ def login_cas():
     else:
         info_user["token"] = user_auth_inst["token"]
         return info_user
+
+@get('/logout')
+@authenticate
+def logout():
+    auth = request.headers.get('Authorization')
+    res = ConnexionHandler.disconnect_user(token=auth)
+    return {
+        "disconnected": res
+    }

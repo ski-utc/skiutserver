@@ -27,4 +27,5 @@ def get_meta():
         return meta
     else:
         meta["user"]["login"] = user_auth_inst["login"]
+        meta["user"]["auth"] = True
         return meta

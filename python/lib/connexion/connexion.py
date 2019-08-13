@@ -13,7 +13,6 @@ def authenticate(f):
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        print("ok")
         auth = request.headers.get('Authorization')
         if auth is None:
             response.status = 401
@@ -152,4 +151,22 @@ class ConnexionHandler:
                     "token": sql_tuples[1],
                     "validity": sql_tuples[0]
                 }
-
+    @staticmethod
+    def disconnect_user(token=None):
+        con = dbskiut_con()
+        con.begin()
+        with con:
+            cur = con.cursor()
+            date = datetime.datetime.now() - datetime.timedelta(minutes=1)
+            validity = date.strftime('%Y-%m-%d %H:%M:%S')
+            try:
+                sql = "UPDATE auth SET validity=%s WHERE token=%s"
+                sql_tuples = (validity, token)
+                cur.execute(sql, sql_tuples)
+                con.commit()
+            except MySQLdb.IntegrityError:
+                logging.warn("failed to update connexion")
+                return False
+            finally:
+                cur.close()
+            return True
