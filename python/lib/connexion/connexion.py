@@ -99,9 +99,10 @@ class ConnexionHandler:
             else:
                 date = datetime.datetime.now() + datetime.timedelta(minutes=15)
                 validity = date.strftime('%Y-%m-%d %H:%M:%S')
+                token = self.generate_token()
                 try:
-                    sql = "UPDATE auth SET validity=%s WHERE login=%s"
-                    sql_tuples=(validity, self.login)
+                    sql = "UPDATE auth SET token=%s, validity=%s WHERE login=%s"
+                    sql_tuples=(token, validity, self.login)
                     cur.execute(sql, sql_tuples)
                     con.commit()
                 except MySQLdb.IntegrityError:
