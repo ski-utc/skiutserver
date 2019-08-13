@@ -1,24 +1,22 @@
 from bottle import request, response
 from bottle import post, get, route
 from user.user import User
+from connexion.connexion import ConnexionHandler, authenticate
 
 import json
 
 @get('/test')
+@authenticate
 def test():
     '''first route'''
-
     return json.dumps({"skiutc":"skiutc"})
 
-
-@route('/login', method=['OPTIONS', 'POST'])
+@post('/login')
 def login_cas():
     """
     end point login cas
     :return:
     """
-    if request.method == 'OPTIONS':
-        return {}
     try:
         try:
             data = json.loads(request.body.read())
@@ -45,12 +43,16 @@ def login_cas():
     response.status = 200
     response.headers['Content-Type'] = 'application/json'
 
+    user_auth = ConnexionHandler.build_handler(login=user_log.get("login"))
+    user_auth_inst = user_auth.handle_connexion()
+
     info_user = user.get_user_info()
 
-    if info_user is None:
+    if info_user is None and user_auth_inst["token"]:
         user_return = {
-            "login": user_log.get("login")
+            "token": token
         }
         return user_return
     else:
+        info_user["token"] = user_auth_inst["token"]
         return info_user
