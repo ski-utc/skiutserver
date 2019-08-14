@@ -16,9 +16,9 @@ class Shotgun:
     timestamp
 
     reset auto increment :
-    ALTER TABLE `users` DROP `id`;
-    ALTER TABLE `users` AUTO_INCREMENT = 1;
-    ALTER TABLE `users` ADD `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+    ALTER TABLE `shotgun-etu_2020` DROP `idshotgun`;
+    ALTER TABLE `shotgun-etu_2020` AUTO_INCREMENT = 1;
+    ALTER TABLE `shotgun-etu_2020` ADD `idshotgun` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
     """
     def __init__(self):
         self.shotgun = None
