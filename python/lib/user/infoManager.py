@@ -11,7 +11,7 @@ class infoManager(User):
     @staticmethod
     def construct_from_shotgun():
         """
-        Build the native database from shotgun by crossing login on the shotgun to the User class
+        Build the native database from shotgun by crossing login on the shotgun to the User class and inserting into db
         :return:
         """
 
@@ -26,4 +26,11 @@ class infoManager(User):
 
         return {}
 
+    def change_info(self, **kwargs):
+        """
+        Changes the information of the user already existing in the db
+        will be called with list of inforrmation to update (in kwargs)
+        :return:
+        """
 
+        return {}

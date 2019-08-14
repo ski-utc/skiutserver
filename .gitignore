@@ -7,3 +7,4 @@ python/lib/config/__pycache__
 python/lib/user/__pycache__
 python/lib/webapis/__pycache__
 python/lib/connexion/__pycache__
+python/lib/shotgun/__pycache__

@@ -6,6 +6,7 @@ import datetime
 from functools import wraps
 import json
 import inspect
+import pymysql
 from user.user import User
 
 def authenticate(f):
@@ -92,8 +93,9 @@ class ConnexionHandler:
                     sql = "INSERT INTO auth VALUES (%s,%s,%s)"
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to create connexion")
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
                     return None
                 finally:
                     cur.close()
@@ -111,8 +113,9 @@ class ConnexionHandler:
                     sql_tuples=(token, validity, self.login)
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to create connexion")
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
                     return None
                 finally:
                     cur.close()
@@ -147,9 +150,10 @@ class ConnexionHandler:
                     sql_tuples = (validity, self.passed_token)
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to update connexion")
-                    return False
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
+                    return None
                 finally:
                     cur.close()
                 return {
@@ -170,8 +174,9 @@ class ConnexionHandler:
                 sql_tuples = (validity, token)
                 cur.execute(sql, sql_tuples)
                 con.commit()
-            except MySQLdb.IntegrityError:
-                logging.warn("failed to update connexion")
+            except pymysql.InternalError as error:
+                code, message = error.args
+                print (">>>>>>>>>>>>>", code, message)
                 return False
             finally:
                 cur.close()

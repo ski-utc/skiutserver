@@ -1,5 +1,6 @@
 from user.user import User
 from db import dbskiut_con
+import pymysql
 
 class Shotgun:
     """
@@ -25,5 +26,16 @@ class Shotgun:
     @staticmethod
     def add_to_shotgun(login=None):
         con = dbskiut_con()
-        return {}
+        con.begin()
+        with con:
+            cur = con.cursor()
+            sql = "INSERT INTO `shotgun-etu_2020` (login) VALUES (%s)"
+            try:
+                cur.execute(sql, login)
+                con.commit()
+            except pymysql.InternalError as error:
+                code, message = error.args
+                print (">>>>>>>>>>>>>", code, message)
+            finally:
+                cur.close()
 
