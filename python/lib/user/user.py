@@ -1,20 +1,36 @@
 import requests
 from db import dbskiut_con
-from config.urls import _SKIUTC_SERVICE, _CAS_URL
+from config.urls import _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
+from requests.exceptions import HTTPError
 
 class User():
     """
     User methods
+    With the User object, you can retrieve any utc user with a login or an email
     """
 
-    def __init__(self, login):
+    def __init__(self, login=None, email=None):
+        self.email = email
         self.login = login
-        self.user_info = None
+        if login is not None:
+            self.get_user_info_ginger()
+        self.user_info = ""
+        self.name = ""
+        self.surname = ""
+        self.cotisant = ""
 
     def get_login(self):
         return self.login
 
+    def get_email(self):
+        if self.email is None:
+            return {'error': 'No email was build'}
+        return self.email
+
     def get_user_info(self):
+        """
+        :return: user info that have shotgun skiutc
+        """
         con = dbskiut_con()
         with con:
             cur = con.cursor()
@@ -27,6 +43,37 @@ class User():
 
         return self.user_info
 
+    def get_user_info_ginger(self):
+        """
+        :return: object with info of CAS users
+        """
+        headersginger = {
+            'Content-Type': 'application/json',
+            'User-Agent': 'python'
+        }
+        paramsginger = {
+            'key': _GINGER_KEY
+        }
+        try:
+            res = requests.get(_GINGER_URL+self.login, headers=headersginger, params=paramsginger)
+            res.raise_for_status()
+        except HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
+        user = res.json()
+
+        if user.get("error"):
+            return None
+
+        self.email = user["mail"]
+        self.name = user["nom"]
+        self.surname = user["prenom"]
+        self.cotisant = user["is_cotisant"]
+
+        return user
+
+
     @staticmethod
     def build_user_from_login(username):
         """
@@ -34,7 +81,16 @@ class User():
         :param username: login of user
         :return: User object
         """
-        return User(username)
+        return User(login=username)
+
+    @staticmethod
+    def build_user_from_email(email):
+        """
+        Create a new User object
+        :param email: email of user
+        :return: User object
+        """
+        return User(email=email)
 
     @staticmethod
     def login(username=None, password=None):
