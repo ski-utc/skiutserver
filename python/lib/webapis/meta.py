@@ -2,6 +2,7 @@ from bottle import request, response
 from bottle import post, get, route
 from user.user import User
 from connexion.connexion import ConnexionHandler
+from shotgun.shotgun import Shotgun
 
 @get("/meta")
 def get_meta():
