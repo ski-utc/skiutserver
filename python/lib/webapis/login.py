@@ -51,7 +51,7 @@ def login_cas():
     if info_user is None and user_auth_inst["token"]:
         user_return = {
             "login": user_log.get("login"),
-            "token": token
+            "token": user_auth_inst["token"]
         }
         return user_return
     else:
