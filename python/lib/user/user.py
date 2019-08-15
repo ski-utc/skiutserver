@@ -34,7 +34,7 @@ class User():
         con = dbskiut_con()
         with con:
             cur = con.cursor()
-            sql = "SELECT * from users_2019 WHERE login=%s"
+            sql = "SELECT * from users_2020 WHERE login=%s"
             cur.execute(sql, self.login)
             user_info = cur.fetchone()
             if user_info is None:
