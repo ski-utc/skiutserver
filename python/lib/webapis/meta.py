@@ -3,7 +3,6 @@ from bottle import post, get, route
 from user.user import User
 from connexion.connexion import ConnexionHandler
 
-
 @get("/meta")
 def get_meta():
     """

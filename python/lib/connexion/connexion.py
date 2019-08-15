@@ -5,6 +5,9 @@ import secrets
 import datetime
 from functools import wraps
 import json
+import inspect
+import pymysql
+from user.user import User
 
 def authenticate(f):
     """
@@ -24,7 +27,11 @@ def authenticate(f):
             response.status = 401
             response.message = '401 You are not logged in !'
             return json.dumps({"error": "NOT LOGGED"})
-        return f(*args, **kwargs)
+        if "user" in inspect.getfullargspec(f).args:
+            user = User.build_user_from_login(user_auth_inst["login"])
+            return f(user=user, *args, **kwargs)
+        else:
+            return f(*args, **kwargs)
     return wrapper
 
 class ConnexionHandler:
@@ -86,8 +93,9 @@ class ConnexionHandler:
                     sql = "INSERT INTO auth VALUES (%s,%s,%s)"
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to create connexion")
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
                     return None
                 finally:
                     cur.close()
@@ -105,8 +113,9 @@ class ConnexionHandler:
                     sql_tuples=(token, validity, self.login)
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to create connexion")
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
                     return None
                 finally:
                     cur.close()
@@ -141,9 +150,10 @@ class ConnexionHandler:
                     sql_tuples = (validity, self.passed_token)
                     cur.execute(sql, sql_tuples)
                     con.commit()
-                except MySQLdb.IntegrityError:
-                    logging.warn("failed to update connexion")
-                    return False
+                except pymysql.InternalError as error:
+                    code, message = error.args
+                    print (">>>>>>>>>>>>>", code, message)
+                    return None
                 finally:
                     cur.close()
                 return {
@@ -164,8 +174,9 @@ class ConnexionHandler:
                 sql_tuples = (validity, token)
                 cur.execute(sql, sql_tuples)
                 con.commit()
-            except MySQLdb.IntegrityError:
-                logging.warn("failed to update connexion")
+            except pymysql.InternalError as error:
+                code, message = error.args
+                print (">>>>>>>>>>>>>", code, message)
                 return False
             finally:
                 cur.close()
