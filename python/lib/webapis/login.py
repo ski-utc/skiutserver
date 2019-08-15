@@ -7,9 +7,9 @@ import json
 
 @get('/test')
 @authenticate
-def test():
+def test(user=None):
     '''first route'''
-    return json.dumps({"skiutc":"skiutc"})
+    return json.dumps({"skiutc":"skiutc", "user": user.get_login()})
 
 @post('/login')
 def login_cas():
