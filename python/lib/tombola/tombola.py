@@ -1,14 +1,3 @@
-"""
-table tombola:
- - id (pk)
- - id_transaction varchar
- - id_user varchar
- - status ['W' > progress, 'A' > abort, 'V' > valid]
- - ticket1
- - ticket5
- - ticket10
-"""
-
 import requests
 from db import dbskiut_con
 from config.urls import _SKIUTC_SERVICE, _CAS_URL
@@ -20,9 +9,6 @@ class Tombola():
     """
     Tombola methods
     """
-    # def __init__(self, user):
-    #     self.user = user
-
     def buy_tombola(self, user, ticket1, ticket5, ticket10):
         """
         Do the transaction on weezevent side
@@ -30,13 +16,13 @@ class Tombola():
         """
         api = WeezeventAPI()
 
-        tickets = [
-            ['15122', ticket1],
-            ['15123', ticket10],
-            ['15121', ticket5]
-        ]
+        tickets = []
 
-        response = api.create_transaction(tickets, user.get_email(), 'http://assos.utc.fr/baignoirutc')
+        if int(ticket1) > 0 : tickets.append(['15122', ticket1])
+        if int(ticket5) > 0 : tickets.append(['15121', ticket5])
+        if int(ticket10) > 0 : tickets.append(['15123', ticket10])
+
+        response = api.create_transaction(tickets, user.get_email(), _SKIUTC_SERVICE)
 
         con = dbskiut_con()
         con.begin()
@@ -79,21 +65,16 @@ class Tombola():
         con = dbskiut_con()
         con.begin()
         try:
-            print('begin try')
             cur = con.cursor()
             sql = "SELECT SUM(`ticket1`) as `ticket1`, SUM(`ticket5`) as `ticket5`, SUM(`ticket10`) as `ticket10` from `tombola_2020` where `login_user`=%s and `status`=%s"
-            print('sql ok')
             cur.execute(sql, (user.get_login(), 'V'))
             con.commit()
-            print('execute ok')
             response = cur.fetchone()
             response = {
                 'ticket1': int(response['ticket1']),
                 'ticket5': int(response['ticket5']),
                 'ticket10': int(response['ticket10']),
             }
-
-            print(response)
         except Exception as e:
             raise e
         finally:
