@@ -35,3 +35,4 @@ Liste des choses à prévoir pour l'API :
 + Calcul des options pour un user ( cours, pack, bouf etc )
 + Shotgun ( pack, chambre et physique)
 + Tombola
++ lol
