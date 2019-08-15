@@ -5,7 +5,7 @@ _GINGER_URL = ""
 _GINGER_KEY = ""
 
 _WEEZ_URL = ""
-_WEEZ_ID= ""
+_WEEZ_FUN_ID = ""
 _WEEZ_KEY = ""
 
 _DB_HOST = ""
