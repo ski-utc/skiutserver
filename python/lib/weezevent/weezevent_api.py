@@ -31,9 +31,11 @@ class WeezeventAPI():
 
         if method == 'get':
             request = requests.get
-
-        response = request(f"{_WEEZ_URL}/{service}/{route}?system_id=payutc", headers=headers,  data=data)
-
+        try:
+            response = request(f"{_WEEZ_URL}/{service}/{route}?system_id=payutc", headers=headers,  data=data)
+        except Exception e:
+            raise e
+        
         return response
 
     #Connect the app with its key
