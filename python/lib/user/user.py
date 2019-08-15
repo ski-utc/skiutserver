@@ -18,6 +18,13 @@ class User():
         self.name = ""
         self.surname = ""
         self.cotisant = ""
+        self.valid = True
+
+    def is_valid(self):
+        """
+        :return: True if user build is etu
+        """
+        return self.valid
 
     def get_login(self):
         return self.login
@@ -26,6 +33,12 @@ class User():
         if self.email is None:
             return {'error': 'No email was build'}
         return self.email
+
+    def is_cotisant(self):
+        """
+        :return: True if user is cotisant
+        """
+        return self.cotisant
 
     def get_user_info(self):
         """
@@ -64,6 +77,7 @@ class User():
         user = res.json()
 
         if user.get("error"):
+            self.valid = False
             return None
 
         self.email = user["mail"]
