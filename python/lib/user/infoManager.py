@@ -1,4 +1,5 @@
 from user.user import User
+from shotgun.shotgun import Shotgun
 
 class infoManager(User):
     """
@@ -14,6 +15,8 @@ class infoManager(User):
         Build the native database from shotgun by crossing login on the shotgun to the User class and inserting into db
         :return:
         """
+        list = Shotgun.get_shotgun()
+
 
         return {}
 
