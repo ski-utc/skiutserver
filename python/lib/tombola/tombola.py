@@ -109,7 +109,7 @@ class Tombola():
         con.begin()
         try:
             cur = con.cursor()
-            sql = "SELECT `id_transaction` from `tombola_2020` where `status`=%s"
+            sql = "SELECT `id_transaction` FROM `tombola_2020` WHERE `status`=%s"
             cur.execute(sql, 'W')
             con.commit()
             transactions = cur.fetchall()
