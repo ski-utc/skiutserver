@@ -6,7 +6,7 @@ from connexion.connexion import ConnexionHandler
 @get("/meta")
 def get_meta():
     """
-    Returns all static data when laoading the app
+    Returns all static data when loading the app
     We don't use authenticate here because wwe don't need to be connected
     Therefore, we are checking if user is connected to get user info if there are
     :return: json meta for static data on app
@@ -15,7 +15,6 @@ def get_meta():
     meta = {
         "user": {}
     }
-
     auth = request.headers.get('Authorization')
     user_auth_inst = ConnexionHandler.is_authenticated(token=auth)
 

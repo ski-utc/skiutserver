@@ -12,12 +12,27 @@ class User():
     def __init__(self, login=None, email=None):
         self.email = email
         self.login = login
-        if login is not None:
-            self.get_user_info_ginger()
         self.user_info = ""
         self.name = ""
         self.surname = ""
         self.cotisant = ""
+        self.adult = None
+        self.valid = True
+        if login is not None:
+            self.get_user_info_ginger()
+
+
+    def is_valid(self):
+        """
+        :return: True if user build is etu
+        """
+        return self.valid
+
+    def get_name(self):
+        return self.name
+
+    def get_surname(self):
+        return self.surname
 
     def get_login(self):
         return self.login
@@ -26,6 +41,15 @@ class User():
         if self.email is None:
             return {'error': 'No email was build'}
         return self.email
+
+    def is_adult(self):
+        return self.adult
+
+    def is_cotisant(self):
+        """
+        :return: True if user is cotisant
+        """
+        return self.cotisant
 
     def get_user_info(self):
         """
@@ -64,12 +88,14 @@ class User():
         user = res.json()
 
         if user.get("error"):
+            self.valid = False
             return None
 
         self.email = user["mail"]
         self.name = user["nom"]
         self.surname = user["prenom"]
         self.cotisant = user["is_cotisant"]
+        self.adult = user["is_adulte"]
 
         return user
 
