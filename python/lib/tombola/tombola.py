@@ -45,7 +45,7 @@ class Tombola():
 
         response = api.get_transaction_info(transaction)
 
-        if response['status'] == 'V':
+        if response['status'] != 'W':
             con = dbskiut_con()
             con.begin()
             try:
@@ -97,7 +97,28 @@ class Tombola():
         finally:
             cur.close()
 
-        #Update the transaction status in the bdd
-        self.update_transaction_status(transaction['id_transaction'])
+        if transaction.get('id_transaction'):
+            #Update the transaction status in the bdd
+            self.update_transaction_status(transaction['id_transaction'])
 
         return self.get_user_stats(user)
+
+    # Update each transaction status which have not been handled
+    def check_transaction_routine(self):
+        con = dbskiut_con()
+        con.begin()
+        try:
+            cur = con.cursor()
+            sql = "SELECT `id_transaction` FROM `tombola_2020` WHERE `status`=%s"
+            cur.execute(sql, 'W')
+            con.commit()
+            transactions = cur.fetchall()
+        except Exception as e:
+            raise e
+        finally:
+            cur.close()
+
+        for transaction in transactions:
+            if transaction.get('id_transaction'):
+                print('update ', transaction['id_transaction'])
+                self.update_transaction_status(transaction['id_transaction'])
