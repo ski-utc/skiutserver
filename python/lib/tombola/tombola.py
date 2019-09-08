@@ -85,7 +85,6 @@ class Tombola():
             raise e
         finally:
             cur.close()
-        print(response)
         return json.dumps(response)
 
     def validate_tombola(self, user):
@@ -126,7 +125,6 @@ class Tombola():
 
         for transaction in transactions:
             if transaction.get('id_transaction'):
-                print('update ', transaction['id_transaction'])
                 self.update_transaction_status(transaction['id_transaction'])
 
     def get_poids(self, user):
@@ -138,12 +136,10 @@ class Tombola():
             cur.execute(sql, 'V')
             con.commit()
             total_tickets = cur.fetchone()
-            print(total_tickets)
             sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM tombola_2020 WHERE `login_user`=%s AND `status`=%s"
             cur.execute(sql, (user.get_login(), 'V'))
             con.commit()
             user_tickets = cur.fetchone()
-            print(user_tickets)
         except Exception as e:
             raise e
         finally:
