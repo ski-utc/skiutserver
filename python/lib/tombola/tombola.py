@@ -66,20 +66,25 @@ class Tombola():
         con.begin()
         try:
             cur = con.cursor()
-            sql = "SELECT SUM(`ticket1`) as `ticket1`, SUM(`ticket5`) as `ticket5`, SUM(`ticket10`) as `ticket10` from `tombola_2020` where `login_user`=%s and `status`=%s"
+            sql = "SELECT SUM(`ticket1`) AS `ticket1`, SUM(`ticket5`) AS `ticket5`, SUM(`ticket10`) AS `ticket10` FROM `tombola_2020` WHERE `login_user`=%s AND `status`=%s"
             cur.execute(sql, (user.get_login(), 'V'))
             con.commit()
             response = cur.fetchone()
+
+            for k, v in response.items():
+                if v is None:
+                    response[k] = 0
+
             response = {
                 'ticket1': int(response['ticket1']),
                 'ticket5': int(response['ticket5']),
                 'ticket10': int(response['ticket10']),
+                'poids': int(self.get_poids(user))
             }
         except Exception as e:
             raise e
         finally:
             cur.close()
-
         return json.dumps(response)
 
     def validate_tombola(self, user):
@@ -88,7 +93,7 @@ class Tombola():
         con.begin()
         try:
              cur = con.cursor()
-             sql = "SELECT `id_transaction` from `tombola_2020` where `login_user`=%s ORDER BY `id` DESC"
+             sql = "SELECT `id_transaction` FROM `tombola_2020` WHERE `login_user`=%s ORDER BY `id` DESC"
              cur.execute(sql, user.get_login())
              con.commit()
              transaction = cur.fetchone()
@@ -120,5 +125,30 @@ class Tombola():
 
         for transaction in transactions:
             if transaction.get('id_transaction'):
-                print('update ', transaction['id_transaction'])
                 self.update_transaction_status(transaction['id_transaction'])
+
+    def get_poids(self, user):
+        con = dbskiut_con()
+        con.begin()
+        try:
+            cur = con.cursor()
+            sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM tombola_2020 WHERE `status`=%s"
+            cur.execute(sql, 'V')
+            con.commit()
+            total_tickets = cur.fetchone()
+            sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM tombola_2020 WHERE `login_user`=%s AND `status`=%s"
+            cur.execute(sql, (user.get_login(), 'V'))
+            con.commit()
+            user_tickets = cur.fetchone()
+        except Exception as e:
+            raise e
+        finally:
+            cur.close()
+
+        if user_tickets is None:
+            user_tickets = 0
+
+        if total_tickets is None:
+            total_tickets = 0
+
+        return int(user_tickets['value'])/total_tickets['value']
