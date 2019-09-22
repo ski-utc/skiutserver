@@ -28,5 +28,6 @@ def get_meta():
         info_user = user.get_user_info()
         meta["user"]["info"] = info_user
         meta["user"]["login"] = user_auth_inst["login"]
+        meta["user"]["admin"] = bool(user_auth_inst["admin"])
         meta["user"]["auth"] = True
         return meta

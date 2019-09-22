@@ -88,9 +88,9 @@ class ConnexionHandler:
                 token = self.generate_token()
                 date = datetime.datetime.now() + datetime.timedelta(minutes=15)
                 validity = date.strftime('%Y-%m-%d %H:%M:%S')
-                sql_tuples = (self.login, token, validity)
+                sql_tuples = (self.login, token, validity, 0)
                 try:
-                    sql = "INSERT INTO auth VALUES (%s,%s,%s)"
+                    sql = "INSERT INTO auth VALUES (%s,%s,%s,%s)"
                     cur.execute(sql, sql_tuples)
                     con.commit()
                 except pymysql.InternalError as error:
@@ -122,6 +122,7 @@ class ConnexionHandler:
                 return {
                     "login": sql_tuples[2],
                     "token": sql_tuples[0],
+                    "admin": user_in_db["admin"],
                     "validity": sql_tuples[1]
                 }
 
@@ -159,6 +160,7 @@ class ConnexionHandler:
                 return {
                     "login": user_in_db["login"],
                     "token": sql_tuples[1],
+                    "admin": user_in_db["admin"],
                     "validity": sql_tuples[0]
                 }
     @staticmethod
