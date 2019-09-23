@@ -24,6 +24,10 @@ def get_meta():
     if user_auth_inst is None:
         return meta
     else:
+        user = User.build_user_from_login(user_auth_inst["login"])
+        info_user = user.get_user_info()
+        meta["user"]["info"] = info_user
         meta["user"]["login"] = user_auth_inst["login"]
+        meta["user"]["admin"] = bool(user_auth_inst["admin"])
         meta["user"]["auth"] = True
         return meta
