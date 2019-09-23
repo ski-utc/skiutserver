@@ -12,3 +12,8 @@ _DB_HOST = ""
 _DB_NAME = ""
 _DB_USER = ""
 _DB_PASSWORD = ""
+
+_SMTPS_MAIL = ''
+_MAIL_LOGIN = ""
+_MAIL_PASSWORD = ""
+_MAIL_SKIUTC = ""
