@@ -21,7 +21,7 @@ class Shotgun:
     ALTER TABLE `shotgun-etu_2020` AUTO_INCREMENT = 1;
     ALTER TABLE `shotgun-etu_2020` ADD `idshotgun` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
     """
-    def __init__(self,login=""):
+    def __init__(self, login=""):
         self.login = login
         self.shotgun = False
         self._add_to_shotgun()
@@ -41,7 +41,7 @@ class Shotgun:
                 cur = con.cursor()
                 sql = "INSERT INTO `shotgun-etu_2020` (login) VALUES (%s)"
                 try:
-                    cur.execute(sql, login)
+                    cur.execute(sql, self.login)
                     con.commit()
                 except pymysql.InternalError as error:
                     code, message = error.args
@@ -50,12 +50,15 @@ class Shotgun:
                 except pymysql.err.IntegrityError as error:
                     code, message = error.args
                     print (">>>>>>>>>>>>>", code, message)
-                    self.shotgun =  False
+                    self.shotgun = False
                 finally:
+                    if cur.lastrowid:
+                        self.shotgun = True
+                    else:
+                        self.shotgun = False
                     cur.close()
-                self.shotgun =  True
         else:
-            self.shotgun =  False
+            self.shotgun = False
 
     def shotgun_valid(self):
         return self.shotgun
