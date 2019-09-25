@@ -1,5 +1,8 @@
 import json
-
+from config.urls import _SMTPS_MAIL, _MAIL_LOGIN, _MAIL_PASSWORD, _MAIL_SKIUTC
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
 
 def file_to_json(path):
     with open(path, 'r') as f:
@@ -7,6 +10,20 @@ def file_to_json(path):
     json_data = json.loads(data)
     return json_data
 
+def send_skiutc_mail(target, subjet, body):
+    server = smtplib.SMTP(_SMTPS_MAIL, 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(_MAIL_LOGIN, _MAIL_PASSWORD)
+    fromaddr = _MAIL_SKIUTC
+    toaddr = target
+    msg = MIMEMultipart()
+    msg['From'] = "SkiUTC <"+fromaddr+">"
+    msg['To'] = toaddr
+    msg['Subject'] = subjet
+    msg.attach(MIMEText(body, 'html'))
+    server.sendmail(fromaddr, toaddr, msg.as_string())
 
 class PackSwitcher(object):
     def numbers_to_packname(self, argument):
