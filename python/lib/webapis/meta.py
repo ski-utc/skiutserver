@@ -2,6 +2,8 @@ from bottle import request, response
 from bottle import post, get, route
 from user.user import User
 from connexion.connexion import ConnexionHandler
+from shotgun.shotgun import Shotgun
+from datetime import datetime
 
 @get("/meta")
 def get_meta():
@@ -13,7 +15,9 @@ def get_meta():
     """
 
     meta = {
-        "user": {}
+        "user": {},
+        "shotgun_authorized": Shotgun.check_time(),
+        "current_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     auth = request.headers.get('Authorization')
     user_auth_inst = ConnexionHandler.is_authenticated(token=auth)
