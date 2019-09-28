@@ -117,7 +117,7 @@ class Shotgun:
     @staticmethod
     def check_time():
         valid = False
-        validity_date = datetime(2019, 10, 14, 4, 0, 0, 0)
+        validity_date = datetime(2019, 10, 15, 0, 0, 0, 0)
         if datetime.now() - validity_date > timedelta(0):
             valid = True
         return valid
