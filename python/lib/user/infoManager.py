@@ -17,7 +17,7 @@ class infoManager(User):
         self._recap_user = None
         self._price = 0
         self._key_infos = ["address", "zipcode", "tel", "city", "size", "weight", "shoesize", "transport", "transport-back",
-                     "food", "pack", "equipment", "items", "assurance_annulation", "assurance_rapa"]
+                     "food", "pack", "equipment", "items"]
 
     def update_price(self, p):
         self._price += p
@@ -106,8 +106,7 @@ class infoManager(User):
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
               "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s," \
-              "`assurance_annulation`=%s, `assurance_rapa`=%s " \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s " \
               "WHERE login=%s"
 
         con = dbskiut_con()
@@ -153,8 +152,6 @@ class infoManager(User):
             self.update_price(list_prices["base_pack_etu"])
         if user_info.get('food') == 1:
             self.update_price(list_prices["food_pack"])
-        if user_info.get('assurance_annulation') == 1:
-            self.update_price(list_prices["assurance"])
         """
         Packs neige now
         """
