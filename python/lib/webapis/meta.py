@@ -27,13 +27,12 @@ def get_meta():
     response.status = 200
     response.headers['Content-Type'] = 'application/json'
 
-
     if user_auth_inst is None:
         return meta
     else:
         user = User.build_user_from_login(user_auth_inst["login"])
         info_user = user.get_user_info()
-        if info_user.get("login"):
+        if info_user:
             meta["prices"] = file_to_json('meta/prices.json')
         meta["user"]["info"] = info_user
         meta["user"]["login"] = user_auth_inst["login"]
