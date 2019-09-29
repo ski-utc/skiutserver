@@ -1,6 +1,7 @@
-from bottle import post, route, get
+from bottle import post, route, get, request
 from connexion.connexion import authenticate
 from shotgun.shotgun import Shotgun
+import json
 
 @post('/shotgunme')
 @authenticate
