@@ -1,25 +1,25 @@
 {
-  "base_pack_etu": 329,
-  "base_pack_tremplin": 340,
+  "base_pack_etu": 330,
+  "base_pack_tremplin": 345,
   "base_pack_invite": 350,
   "food_pack": 42,
   "packs" : {
     "mythic" : {
-      "ski": 80,
-      "snow": 80,
-      "ski_seul": 75,
-      "snow_seul": 75
+      "ski": 89,
+      "snow": 89,
+      "ski_seul": 80,
+      "snow_seul": 80
     },
     "heroique": {
-      "ski": 65,
-      "snow": 65,
+      "ski": 69,
+      "snow": 69,
       "ski_seul": 60,
       "snow_seul": 60
     },
     "normal": {
       "ski": 50,
       "snow": 50,
-      "ski_seul": 50,
+      "ski_seul": 40,
       "snow_seul": 50
     }
   },
@@ -27,5 +27,6 @@
     "croissant": 0.9,
     "chocolatine": 0.9,
     "baguette": 0.9
-  }
+  },
+  "assurance_annulation": 10.8
 }

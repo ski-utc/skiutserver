@@ -17,5 +17,6 @@ def enableCORSGenericRoute():
 def options_handler(path = None):
     return
 
+
 if __name__ == '__main__':
-    run(host='localhost', port=8000, debug=True, reloader=True)
+    run(host='localhost', port=8000, debug=False, reloader=True)
