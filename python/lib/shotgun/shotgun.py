@@ -25,7 +25,8 @@ class Shotgun:
     def __init__(self, login=""):
         self.login = login
         self.shotgun = False
-        self._add_to_shotgun()
+        if len(login) < 9:
+            self._add_to_shotgun()
 
     @staticmethod
     def _organize_table():
