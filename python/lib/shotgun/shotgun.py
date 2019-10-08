@@ -34,7 +34,7 @@ class Shotgun:
         con.begin()
         with con:
             cur = con.cursor()
-            sql = "SELECT * FROM `shotgun-etu_2020` WHERE idshotgun < 301"
+            sql = "SELECT * FROM `shotgun-etu_2020` WHERE idshotgun < 293"
             try:
                 cur.execute(sql)
             except pymysql.err.InternalError as error:
@@ -100,7 +100,7 @@ class Shotgun:
         con.begin()
         with con:
             cur = con.cursor()
-            sql = "SELECT * FROM `shotgun-etu_2020` WHERE idshotgun < 301"
+            sql = "SELECT * FROM `shotgun-etu_2020` WHERE idshotgun < 293"
             try:
                 cur.execute(sql)
             except pymysql.err.InternalError as error:
@@ -152,7 +152,7 @@ class Shotgun:
             mail = login + "@etu.utc.fr"
             #check si l'utilisateur a reussi le shotgun
             msg = ""
-            if place < 301:
+            if place < 293:
                 msg = """Bonsoir,<br /><br />
                     Voici votre résultat à Shotgun Ski\'UTC 2020 pour le semestre de A19 : A, MENTION <br />
                     Vous aurez l\'honneur d\'être parmi nous lors de ce voyage de folie !<br />
