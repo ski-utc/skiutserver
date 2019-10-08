@@ -1,5 +1,5 @@
 from bottle import run, get, hook, response, route
-from webapis import login, meta, tombola, usermanager, shotgun
+from webapis import login, meta, tombola, usermanager, shotgun, usermanager
 
 @hook('after_request')
 #@bottle.route('/:#.*#', method='OPTIONS')  # Also tried old syntax.
@@ -19,4 +19,4 @@ def options_handler(path = None):
 
 
 if __name__ == '__main__':
-    run(host='localhost', port=8000, debug=False, reloader=True)
+    run(host='0.0.0.0', port=8000, debug=False, reloader=True)
