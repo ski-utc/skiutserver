@@ -2,7 +2,7 @@ from db import dbskiut_con
 import secrets
 import datetime
 
-user_list = ["hpaignea","qrichard","lphilber","metzvale","lromanet","mandonpa","leroyjul","cflorimo","sellamva","cogentdo","crappecl","trenaudi","obriotos","lmaignan","amaingue","abrossar","phannart","tleporho"]
+user_list = ["hpaignea","dagehugo","lbabinet","oswaldar","friehhon","lebrecle","ebeauvin","pjullien","vduroche","qrichard","lphilber","metzvale","lromanet","mandonpa","leroyjul","cflorimo","sellamva","cogentdo","crappecl","trenaudi","obriotos","lmaignan","amaingue","abrossar","phannart","tleporho"]
 
 def set_admin():
     con = dbskiut_con()

@@ -25,7 +25,7 @@ class Shotgun:
     def __init__(self, login=""):
         self.login = login
         self.shotgun = False
-        if len(login) < 8:
+        if len(login) < 9:
             self._add_to_shotgun()
 
     @staticmethod
