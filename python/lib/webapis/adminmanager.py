@@ -22,7 +22,7 @@ def add_pay_login(user=None):
         response.status = '400 Bad Request'
         return json.dumps({"error": "Bad Request"})
 
-@get('/getRecasUsers')
+@get('/getRecapUsers')
 @authenticate
 def get_recap_users(user=None):
     try:
