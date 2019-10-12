@@ -58,6 +58,44 @@ def login_cas():
         info_user["token"] = user_auth_inst["token"]
         return info_user
 
+@post('/login_v2')
+def login_v2():
+    try:
+        data = json.loads(request.body.read())
+        if data is None or not data.get('username') or not data.get('ticket'):
+            raise ValueError
+
+        validation = User.validate_auth_ticket(data["ticket"])
+
+        if not validation:
+            raise ValueError
+
+        user = User.build_user_from_login(data["username"])
+
+        user_auth = ConnexionHandler.build_handler(login=data['username'])
+
+        user_auth_inst = user_auth.handle_connexion()
+        
+        info_user = user.get_user_info()
+
+        if info_user is None and user_auth_inst["token"]:
+            user_return = {
+                "login": user_log.get("login"),
+                "token": user_auth_inst["token"]
+            }
+            return user_return
+        else:
+            info_user["token"] = user_auth_inst["token"]
+            return info_user
+
+    except ValueError:
+        response.status = 400
+        return json.dumps({"error": "Wrong authentication"})
+
+    except Exception as e:
+        response.status = 400
+        return  json.dumps({"error": "Bad request"})
+
 @get('/logout')
 @authenticate
 def logout():
