@@ -149,3 +149,22 @@ class User():
         data = {"ticket": st, "login": username}
 
         return data
+
+    @staticmethod
+    def validate_auth_ticket(ticket):
+        """
+        validation of the ticket from the cas in order to authenticate the user
+        """
+
+        headerscas = {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Accept': 'text/plain',
+            'User-Agent': 'python'
+        }
+
+        response = requests.get(f"{_CAS_URL}{ticket}", headers=headerscas)
+
+        if response.status_code  != 200:
+            return False
+
+        return True
