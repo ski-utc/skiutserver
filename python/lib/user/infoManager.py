@@ -16,7 +16,7 @@ class infoManager(User):
         super().__init__(login=login)
         self._price = 0
         self._key_infos = ["address", "zipcode", "tel", "city", "size", "weight", "shoesize", "transport", "transport-back",
-                     "food", "pack", "equipment", "items"]
+                     "food", "pack", "equipment", "items", "assurance_annulation"]
 
     def update_price(self, p):
         self._price += p
@@ -92,21 +92,23 @@ class infoManager(User):
         - transport-back ville depart (0,1)
 
         -- divers --
-        - food (avec porc, sans porc, sans)
+        - food (avec porc, sans porc, vege, sans)
         - assurance annul (0,1)
-        - assurance rapa (0,1)
         :return:
         """
         info = []
         for key in self._key_infos:
             info.append(kwargs[key])
         price = self.get_total_price(kwargs)
+        #adding price to list
         info.append(price)
+        #adding login
         info.append(self.get_login())
+        #tuppling
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
               "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `price`=%s " \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `price`=%s " \
               "WHERE login=%s"
 
         con = dbskiut_con()
