@@ -1,10 +1,10 @@
 from bottle import request, response
 from bottle import post, get, route
 from connexion.connexion import ConnexionHandler, authenticate
-from user import infoManager
+from user.infoManager import infoManager
 import json
 
-@get('/addPayedLogin')
+@post('/addPayedLogin')
 @authenticate
 def add_pay_login(user=None):
     try:
