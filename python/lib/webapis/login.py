@@ -75,12 +75,12 @@ def login_v2():
         user_auth = ConnexionHandler.build_handler(login=data['username'])
 
         user_auth_inst = user_auth.handle_connexion()
-        
+
         info_user = user.get_user_info()
 
         if info_user is None and user_auth_inst["token"]:
             user_return = {
-                "login": user_log.get("login"),
+                "login": user_auth_inst['login'],
                 "token": user_auth_inst["token"]
             }
             return user_return
