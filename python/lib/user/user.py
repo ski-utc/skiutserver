@@ -168,7 +168,7 @@ class User():
             'ticket': ticket
         }
 
-        response = requests.get("https://cas.utc.fr/cas/serviceValidate", headers=headerscas, params=paramscas)
+        response = requests.get(_CAS_URL, headers=headerscas, params=paramscas)
         response = xmltodict.parse(response.text)
 
         try:
