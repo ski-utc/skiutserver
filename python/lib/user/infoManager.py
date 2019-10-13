@@ -137,7 +137,7 @@ class infoManager(User):
             self.update_price(list_prices["base_pack_etu"])
         if user_info.get('food') == 1:
             self.update_price(list_prices["food_pack"])
-        if user.get('goodies') = 1:
+        if user.get('goodies') == 1:
             self.update_price(list_prices["goodies"])
         """
         Packs neige now
