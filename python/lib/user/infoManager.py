@@ -16,7 +16,7 @@ class infoManager(User):
         super().__init__(login=login)
         self._price = 0
         self._key_infos = ["address", "zipcode", "tel", "city", "size", "weight", "shoesize", "transport", "transport-back",
-                     "food", "pack", "equipment", "items", "assurance_annulation"]
+                     "food", "pack", "equipment", "items", "assurance_annulation", "goodies"]
 
     def update_price(self, p):
         self._price += p
@@ -108,7 +108,7 @@ class infoManager(User):
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
               "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `goodies`=%s, `price`=%s" \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `goodies`=%s, `price`=%s " \
               "WHERE login=%s"
 
         con = dbskiut_con()
@@ -137,8 +137,8 @@ class infoManager(User):
             self.update_price(list_prices["base_pack_etu"])
         if user_info.get('food') == 1:
             self.update_price(list_prices["food_pack"])
-        if user.get('goodies') == 1:
-            self.update_price(list_prices["goodies"])
+        if user_info.get("goodies") == 1:
+            self.update(price(list_prices["goodies"]))
         """
         Packs neige now
         """
