@@ -4,7 +4,7 @@ from user.infoManager import infoManager
 from connexion.connexion import ConnexionHandler, authenticate
 import json
 
-@get('/changeInfo')
+@post('/changeInfo')
 @authenticate
 def change_info(user=None):
     try:

@@ -108,7 +108,7 @@ class infoManager(User):
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
               "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `price`=%s " \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `goodies`=%s, `price`=%s" \
               "WHERE login=%s"
 
         con = dbskiut_con()
@@ -137,6 +137,8 @@ class infoManager(User):
             self.update_price(list_prices["base_pack_etu"])
         if user_info.get('food') == 1:
             self.update_price(list_prices["food_pack"])
+        if user.get('goodies') = 1:
+            self.update_price(list_prices["goodies"])
         """
         Packs neige now
         """
