@@ -52,6 +52,20 @@ class User():
         """
         return self.cotisant
 
+    def is_admin(self):
+        con = dbskiut_con()
+        with con:
+            cur = con.cursor()
+            sql = "SELECT * from auth WHERE login=%s"
+            cur.execute(sql, self.login)
+            user_info = cur.fetchone()
+            if user_info is None:
+                return False
+        if user_info["admin"] == 1:
+            return True
+        else:
+            return False
+
     def get_user_info(self):
         """
         :return: user info that have shotgun skiutc
