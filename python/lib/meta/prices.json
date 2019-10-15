@@ -17,16 +17,16 @@
       "snow": 69,
       "ski_seul": 60,
       "snow_seul": 60,
-      "ski_shoes": 75,
-      "snow_shoes": 75
+      "ski_shoes": 55,
+      "snow_shoes": 55
     },
     "normal": {
       "ski": 50,
       "snow": 50,
       "ski_seul": 40,
       "snow_seul": 50,
-      "ski_shoes": 75,
-      "snow_shoes": 75
+      "ski_shoes": 35,
+      "snow_shoes": 35
     }
   },
   "petit_dej": {

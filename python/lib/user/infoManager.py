@@ -151,6 +151,7 @@ class infoManager(User):
         pack = pack_switcher.numbers_to_packname(user_info.get('pack'))
         items = items_switcher.numbers_to_itemsname(user_info.get('items'))
         self.update_price(list_prices["packs"][pack][items])
+        print(list_prices["packs"][pack][items])
         return self._price
 
     def get_price_with_recap(self):
