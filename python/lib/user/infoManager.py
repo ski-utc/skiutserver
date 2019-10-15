@@ -135,16 +135,16 @@ class infoManager(User):
         list_prices = file_to_json('meta/prices.json')
         if user_info.get('type') == 0:
             self.update_price(list_prices["base_pack_etu"])
-        if user_info.get('food') != 0:
+        if int(user_info.get('food')) > 0:
             self.update_price(list_prices["food_pack"])
-        if user_info.get("goodies") == 1:
+        if int(user_info.get("goodies")) == 1:
             self.update_price(list_prices["goodies"])
-        if user_info.get("assurance_annulation") == 1:
+        if int(user_info.get("assurance_annulation")) == 1:
             self.update_price(list_prices["assurance_annulation"])
         """
         Packs neige now
         """
-        if user_info.get('pack') == "NULL":
+        if int(user_info.get('pack')) == 4:
             return self._price
         pack_switcher = PackSwitcher()
         items_switcher = ItemsSwitcher()
