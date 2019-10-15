@@ -32,13 +32,13 @@ class PackSwitcher(object):
         method = getattr(self, method_name, lambda: "Invalid number")
         return method()
 
-    def pack_0(self):
+    def pack_2(self):
         return "mythic"
 
     def pack_1(self):
         return "heroique"
 
-    def pack_2(self):
+    def pack_0(self):
         return "normal"
 
 
@@ -50,9 +50,15 @@ class ItemsSwitcher(object):
         return method()
 
     def items_0(self):
-        return "ski"
+        return "ski_shoes"
 
     def items_1(self):
+        return "snow_shoes"
+
+    def items_4(self):
+        return "ski"
+
+    def items_5(self):
         return "snow"
 
     def items_2(self):

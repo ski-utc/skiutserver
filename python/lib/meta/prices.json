@@ -1,5 +1,5 @@
 {
-  "base_pack_etu": 330,
+  "base_pack_etu": 325,
   "base_pack_tremplin": 345,
   "base_pack_invite": 350,
   "food_pack": 42,
@@ -8,19 +8,25 @@
       "ski": 89,
       "snow": 89,
       "ski_seul": 80,
-      "snow_seul": 80
+      "snow_seul": 80,
+      "ski_shoes": 75,
+      "snow_shoes": 75
     },
     "heroique": {
       "ski": 69,
       "snow": 69,
       "ski_seul": 60,
-      "snow_seul": 60
+      "snow_seul": 60,
+      "ski_shoes": 55,
+      "snow_shoes": 55
     },
     "normal": {
       "ski": 50,
       "snow": 50,
       "ski_seul": 40,
-      "snow_seul": 50
+      "snow_seul": 50,
+      "ski_shoes": 35,
+      "snow_shoes": 35
     }
   },
   "petit_dej": {
@@ -28,5 +34,6 @@
     "chocolatine": 0.9,
     "baguette": 0.9
   },
-  "assurance_annulation": 10.8
+  "assurance_annulation": 11,
+  "goodies": 10
 }

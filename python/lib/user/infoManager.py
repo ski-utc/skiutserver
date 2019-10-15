@@ -15,8 +15,8 @@ class infoManager(User):
     def __init__(self, login=None):
         super().__init__(login=login)
         self._price = 0
-        self._key_infos = ["address", "zipcode", "tel", "city", "size", "weight", "shoesize", "transport", "transport-back",
-                     "food", "pack", "equipment", "items", "assurance_annulation"]
+        self._key_infos = ["address", "zipcode", "tel", "email", "city", "size", "weight", "shoesize", "transport", "transport-back",
+                     "food", "pack", "equipment", "items", "assurance_annulation", "goodies"]
 
     def update_price(self, p):
         self._price += p
@@ -107,8 +107,8 @@ class infoManager(User):
         #tuppling
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
-              "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `price`=%s " \
+              "SET `address`=%s,`zipcode`=%s,`tel`=%s, `email`=%s, `city`=%s, `size`=%s,`weight`=%s,`shoesize`=%s," \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `goodies`=%s, `price`=%s " \
               "WHERE login=%s"
 
         con = dbskiut_con()
@@ -120,13 +120,13 @@ class infoManager(User):
             except pymysql.err.InternalError as error:
                 code, message = error.args
                 print(">>>>>>>>>>>>>", code, message)
-                return False
+                return False, None
             except pymysql.err.IntegrityError as error:
                 code, message = error.args
                 print(">>>>>>>>>>>>>", code, message)
-                return False
+                return False, None
             con.commit()
-        return True
+        return True, price
 
     def get_total_price(self, user_info):
         """
@@ -135,16 +135,23 @@ class infoManager(User):
         list_prices = file_to_json('meta/prices.json')
         if user_info.get('type') == 0:
             self.update_price(list_prices["base_pack_etu"])
-        if user_info.get('food') == 1:
+        if int(user_info.get('food')) > 0:
             self.update_price(list_prices["food_pack"])
+        if int(user_info.get("goodies")) == 1:
+            self.update_price(list_prices["goodies"])
+        if int(user_info.get("assurance_annulation")) == 1:
+            self.update_price(list_prices["assurance_annulation"])
         """
         Packs neige now
         """
+        if int(user_info.get('pack')) == 4:
+            return self._price
         pack_switcher = PackSwitcher()
         items_switcher = ItemsSwitcher()
         pack = pack_switcher.numbers_to_packname(user_info.get('pack'))
         items = items_switcher.numbers_to_itemsname(user_info.get('items'))
         self.update_price(list_prices["packs"][pack][items])
+        print(list_prices["packs"][pack][items])
         return self._price
 
     def get_price_with_recap(self):
