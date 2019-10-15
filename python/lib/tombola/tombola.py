@@ -1,6 +1,6 @@
 import requests
 from db import dbskiut_con
-from config.urls import _SKIUTC_SERVICE, _CAS_URL
+from config.urls import _CAS_URL
 import json
 
 from weezevent.weezevent_api import WeezeventAPI
@@ -9,7 +9,7 @@ class Tombola():
     """
     Tombola methods
     """
-    def buy_tombola(self, user, ticket1, ticket5, ticket10):
+    def buy_tombola(self, user, ticket1, ticket5, ticket10, service):
         """
         Do the transaction on weezevent side
         in order to validate the buy
@@ -22,7 +22,7 @@ class Tombola():
         if int(ticket5) > 0 : tickets.append(['15121', ticket5])
         if int(ticket10) > 0 : tickets.append(['15123', ticket10])
 
-        response = api.create_transaction(tickets, user.get_email(), _SKIUTC_SERVICE)
+        response = api.create_transaction(tickets, user.get_email(), service)
 
         con = dbskiut_con()
         con.begin()
