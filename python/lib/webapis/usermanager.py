@@ -23,14 +23,14 @@ def change_info(user=None):
 
     response.status = 200
     response.headers['Content-Type'] = 'application/json'
-    change_status = user_manager.change_info(**data)
+    change_status, price = user_manager.change_info(**data)
 
     if change_status == False:
         response.status = 400
         response.status = '400 Bad Request'
         return json.dumps({"error": "Bad Request"})
 
-    return {"SUCCESS": change_status}
+    return {"SUCCESS": change_status, "new_price": price}
 
 @get('/getRecap')
 @authenticate
