@@ -2,6 +2,7 @@ import requests
 from db import dbskiut_con
 from config.urls import _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
 from requests.exceptions import HTTPError
+import xmltodict
 
 class User():
     """
@@ -165,7 +166,7 @@ class User():
         return data
 
     @staticmethod
-    def validate_auth_ticket(ticket):
+    def validate_auth_ticket(service, ticket):
         """
         validation of the ticket from the cas in order to authenticate the user
         """
@@ -176,9 +177,17 @@ class User():
             'User-Agent': 'python'
         }
 
-        response = requests.get(f"{_CAS_URL}{ticket}", headers=headerscas)
+        paramscas = {
+            'service': service,
+            'ticket': ticket
+        }
 
-        if response.status_code  != 200:
-            return False
+        response = requests.get(_CAS_URL, headers=headerscas, params=paramscas)
+        response = xmltodict.parse(response.text)
 
-        return True
+        try:
+            username = response['cas:serviceResponse']['cas:authenticationSuccess']['cas:user']
+            return username
+
+        except Exception as e:
+            return None

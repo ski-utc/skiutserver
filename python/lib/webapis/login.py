@@ -62,25 +62,25 @@ def login_cas():
 def login_v2():
     try:
         data = json.loads(request.body.read())
-        if data is None or not data.get('username') or not data.get('ticket'):
+        if data is None or not data.get('service') or not data.get('ticket'):
             raise ValueError
 
-        validation = User.validate_auth_ticket(data["ticket"])
+        username = User.validate_auth_ticket(data['service'], data["ticket"])
 
-        if not validation:
+        if username is None:
             raise ValueError
 
-        user = User.build_user_from_login(data["username"])
+        user = User.build_user_from_login(username)
 
-        user_auth = ConnexionHandler.build_handler(login=data['username'])
+        user_auth = ConnexionHandler.build_handler(login=username)
 
         user_auth_inst = user_auth.handle_connexion()
-        
+
         info_user = user.get_user_info()
 
         if info_user is None and user_auth_inst["token"]:
             user_return = {
-                "login": user_log.get("login"),
+                "login": user_auth_inst['login'],
                 "token": user_auth_inst["token"]
             }
             return user_return
@@ -94,7 +94,7 @@ def login_v2():
 
     except Exception as e:
         response.status = 400
-        return  json.dumps({"error": "Bad request"})
+        return  json.dumps({"error": e})
 
 @get('/logout')
 @authenticate
