@@ -1,10 +1,14 @@
-from bottle import request, response
-from bottle import post, route, patch, get
+from bottle import request, response, redirect
+from bottle import post, route, get
+from config.urls import _SKIUTC_SERVICE
 
 from connexion.connexion import authenticate
 from paiement.paiement import Paiement
 
 import json
+
+from user.user import User
+from webapis.meta import get_meta
 
 @post('/paiement')
 @authenticate
@@ -25,7 +29,7 @@ def paiement(user=None):
         if api_response == -1:
             reponse.status = 200
             return json.dumps({ "message": "User has allready paid."})
-        
+
         return api_response
 
     except ValueError:
@@ -35,3 +39,22 @@ def paiement(user=None):
     except Exception as e:
         response.status = 500
         return json.dumps({ "error": e })
+
+@post('/validatePaiement')
+def paiement():
+    '''route to validate the transaction'''
+    try:
+        query_string = request.query.decode()
+
+        login = query_string.get('login', None)
+
+        if login is None:
+            raise ValueError
+
+        try:
+            Paiement().update_transaction_status(login)
+        except Exception as e:
+            raise ValueError
+
+    except Exception as e:
+        raise e
