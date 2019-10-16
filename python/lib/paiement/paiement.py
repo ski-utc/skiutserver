@@ -1,10 +1,11 @@
 import requests
 from db import dbskiut_con
-from config.urls import _CAS_URL
+from config.urls import _CAS_URL, _CALLBACK_URL
 import json
 from paiement.constants import CONSTANTS as cte
 
 from weezevent.weezevent_api import WeezeventAPI
+from requests.utils import quote
 
 class Paiement():
     """
@@ -35,7 +36,9 @@ class Paiement():
         if user_infos['goodies'] == 1:
             transaction_tickets.append([cte['goodies'], 1])
 
-        response = api.create_transaction(transaction_tickets, user.get_email(), service)
+
+        callback_url = f"{_CALLBACK_URL}/validatePaiement?login={user_infos['login']}"
+        response = api.create_transaction(transaction_tickets, user.get_email(), service, callback_url)
 
         con = dbskiut_con()
         con.begin()
@@ -46,40 +49,41 @@ class Paiement():
                 cur.execute(sql, (response['tra_id'], user_infos['login'] ))
                 con.commit()
             except Exception as e:
-                raise e
+                raise ValueError
             finally:
                 cur.close()
 
         return response
 
-    def update_transaction_status(self, user, tra_id):
-        api = WeezeventAPI()
-        user_infos = user.get_user_info()
+    def update_transaction_status(self, login):
+        con = dbskiut_con()
+        response = None
+        con.begin()
+        try:
+            cur = con.cursor()
+            sql = "SELECT `tra_id` FROM `users_2020` WHERE `login`=%s"
+            cur.execute(sql, login)
+            con.commit()
+            tran = cur.fetchone()
+        except Exception as e:
+            print(e)
+            raise ValueError
+        finally:
+            cur.close()
 
-        response = api.get_transaction_info(tra_id)
+        if  tran.get('tra_id'):
+            api = WeezeventAPI()
+            response = api.get_transaction_info(tran['tra_id'])
 
-        if response['status'] != 'W':
-            con = dbskiut_con()
-            con.begin()
-            try:
-                cur = con.begin()
-                sql = "UPDATE `users_2020` SET `tra_status`=%s WHERE `login`=%s and tra_id=%s"
-                cur.execute(sql, (response['status'], user_infos['login'], tra_id))
-                con.commit()
-            except Exception as e:
-                raise e
-            finally:
-                cur.close()
-
-#     CREATE TABLE `users_2020` (
-#   `login` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-#   `food` int(11) NOT NULL DEFAULT '0',
-#   `equipment` int(11) NOT NULL DEFAULT '0',
-#   `pack` int(11) NOT NULL DEFAULT '0',
-#   `items` int(11) NOT NULL DEFAULT '2',
-#   `tra_id` int(11) DEFAULT NULL,
-#   `tra_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-#   `assurance_annulation` tinyint(1) NOT NULL DEFAULT '0',
-#   `goodies` tinyint(1) NOT NULL DEFAULT '0' ,
-#   PRIMARY KEY (`id_user`)
-# ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            if response['status'] != 'W':
+                con = dbskiut_con()
+                con.begin()
+                try:
+                    cur = con.cursor()
+                    sql = "UPDATE `users_2020` SET `tra_status`=%s WHERE `login`=%s and `tra_id`=%s"
+                    cur.execute(sql, (response['status'], login, tran['tra_id']))
+                    con.commit()
+                except Exception as e:
+                    raise ValueError
+                finally:
+                    cur.close()
