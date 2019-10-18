@@ -55,7 +55,7 @@ class WeezeventAPI():
 
 
     #Create a Weez Transaction with items passed in props
-    def create_transaction(self, items, email, return_url, callback_url = None):
+    def create_transaction(self, items, email, return_url):
         params = {
             'app_key': _WEEZ_KEY,
             'items': json.dumps(items),
@@ -63,10 +63,7 @@ class WeezeventAPI():
             'fun_id': _WEEZ_FUN_ID,
             'return_url': return_url,
         }
-
-        if callback_url is not None:
-            params['callback_url'] = callback_url
-        
+                
         response = self._request('post', 'WEBSALE', 'createTransaction', json.dumps(params))
         print(response.json())
         return response.json()

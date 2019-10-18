@@ -40,13 +40,14 @@ def paiement(user=None):
         response.status = 500
         return json.dumps({ "error": e })
 
-@post('/validatePaiement')
+@get('/validatePaiement')
 def paiement():
     '''route to validate the transaction'''
     try:
         query_string = request.query.decode()
 
         login = query_string.get('login', None)
+        service = query_string.get('service', _SKIUTC_SERVICE)
 
         if login is None:
             raise ValueError
@@ -56,5 +57,7 @@ def paiement():
         except Exception as e:
             raise ValueError
 
+        redirect(service)
+        
     except Exception as e:
         raise e

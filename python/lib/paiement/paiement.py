@@ -37,8 +37,8 @@ class Paiement():
             transaction_tickets.append([cte['goodies'], 1])
 
 
-        callback_url = f"{_CALLBACK_URL}/validatePaiement?login={user_infos['login']}"
-        response = api.create_transaction(transaction_tickets, user.get_email(), service, callback_url)
+        service_url = f"{_CALLBACK_URL}/validatePaiement?login={user_infos['login']}&service={quote(service)}"
+        response = api.create_transaction(transaction_tickets, user.get_email(), service_url)
 
         con = dbskiut_con()
         con.begin()
