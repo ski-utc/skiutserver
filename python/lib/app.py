@@ -1,5 +1,5 @@
 from bottle import run, get, hook, response, route
-from webapis import login, meta, tombola, usermanager, shotgun, adminmanager
+from webapis import login, meta, tombola, usermanager, shotgun, adminmanager, paiement
 
 @hook('after_request')
 #@bottle.route('/:#.*#', method='OPTIONS')  # Also tried old syntax.
