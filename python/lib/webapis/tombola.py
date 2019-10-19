@@ -1,5 +1,6 @@
 from bottle import request, response
 from bottle import post, route, patch, get
+from config.urls import _SKIUTC_SERVICE
 
 from connexion.connexion import authenticate
 from tombola.tombola import Tombola
@@ -20,6 +21,7 @@ def tombola(user=None):
         ticket1 = data.get('ticket1', 0)
         ticket5 = data.get('ticket5', 0)
         ticket10 = data.get('ticket10', 0)
+        service = data.get('service', _SKIUTC_SERVICE)
 
     except ValueError:
         response.status = 400
@@ -29,7 +31,7 @@ def tombola(user=None):
     response.headers['Content-Type'] = 'application/json'
 
 
-    api_response = Tombola().buy_tombola(user, ticket1, ticket5, ticket10)
+    api_response = Tombola().buy_tombola(user, ticket1, ticket5, ticket10, service)
 
     return api_response
 
