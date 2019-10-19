@@ -50,7 +50,6 @@ class WeezeventAPI():
         except Exception as err:
             print(f'Other error occurred: {err}')  # Python 3.6
         else:
-            print('connected')
             return response.json()
 
 
@@ -65,7 +64,7 @@ class WeezeventAPI():
         }
                 
         response = self._request('post', 'WEBSALE', 'createTransaction', json.dumps(params))
-        print(response.json())
+
         return response.json()
 
     #Get transaction information
