@@ -2,6 +2,7 @@ import requests
 from db import dbskiut_con
 from config.urls import _SALT, _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
 from requests.exceptions import HTTPError
+import xmltodict
 
 class User():
     """
@@ -50,6 +51,20 @@ class User():
         :return: True if user is cotisant
         """
         return self.cotisant
+
+    def is_admin(self):
+        con = dbskiut_con()
+        with con:
+            cur = con.cursor()
+            sql = "SELECT * from auth WHERE login=%s"
+            cur.execute(sql, self.login)
+            user_info = cur.fetchone()
+            if user_info is None:
+                return False
+        if user_info["admin"] == 1:
+            return True
+        else:
+            return False
 
     def get_user_info(self):
         """
@@ -161,3 +176,30 @@ class User():
         data = {"ticket": st, "login": username}
 
         return data
+
+    @staticmethod
+    def validate_auth_ticket(service, ticket):
+        """
+        validation of the ticket from the cas in order to authenticate the user
+        """
+
+        headerscas = {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Accept': 'text/plain',
+            'User-Agent': 'python'
+        }
+
+        paramscas = {
+            'service': service,
+            'ticket': ticket
+        }
+
+        response = requests.get(_CAS_URL, headers=headerscas, params=paramscas)
+        response = xmltodict.parse(response.text)
+
+        try:
+            username = response['cas:serviceResponse']['cas:authenticationSuccess']['cas:user']
+            return username
+
+        except Exception as e:
+            return None
