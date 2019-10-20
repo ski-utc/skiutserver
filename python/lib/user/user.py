@@ -10,7 +10,7 @@ class User():
     With the User object, you can retrieve any utc user with a login or an email
     """
 
-    def __init__(self, login=None, email=None):
+    def __init__(self, login=None, email=None, tremplin=False):
         self.email = email
         self.login = login
         self.user_info = ""
@@ -19,7 +19,7 @@ class User():
         self.cotisant = ""
         self.adult = None
         self.valid = True
-        if login is not None:
+        if login is not None and tremplin is False:
             self.get_user_info_ginger()
 
 
@@ -116,13 +116,13 @@ class User():
 
 
     @staticmethod
-    def build_user_from_login(username):
+    def build_user_from_login(username, tremplin=False):
         """
         Create a new User object
         :param username: login of user
         :return: User object
         """
-        return User(login=username)
+        return User(login=username, tremplin=tremplin)
 
     @staticmethod
     def build_user_from_email(email):

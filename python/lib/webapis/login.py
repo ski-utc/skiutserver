@@ -25,7 +25,7 @@ def login_tremplindb():
         if data is None or not data.get("mail_tremplin") or not data.get("password"):
             raise ValueError
 
-        user = User.build_user_from_login(data["mail_tremplin"])
+        user = User.build_user_from_login(data["mail_tremplin"], tremplin = True)
         user_log = User.login(data["mail_tremplin"], data["password"], "trmpln")
 
         if not user_log.get("Validated"):
