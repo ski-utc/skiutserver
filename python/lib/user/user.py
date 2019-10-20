@@ -1,6 +1,6 @@
 import requests
 from db import dbskiut_con
-from config.urls import _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
+from config.urls import _SALT, _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
 from requests.exceptions import HTTPError
 
 class User():
@@ -119,13 +119,25 @@ class User():
         return User(email=email)
 
     @staticmethod
-    def login(username=None, password=None):
+    def login(username=None, password=None, origin=None):
         """
         :param username: login
         :param password:
         :return: user information or login if not in skiutcs db
         """
-        #@TODO //Check BDD si user is tremplin, then login tremplin
+        #Check BDD si user is tremplin, then login tremplin
+
+        if(origin == "trmpln"):
+            con = dbskiut_con()
+            with con:
+                cur = con.cursor()
+                sql = "SELECT * from tremplin_2020 WHERE email=%s AND aes_decrypt(pwd,'"+_SALT+"')=aes_decrypt(aes_encrypt(%s,'"+_SALT+"'),'"+_SALT+"');"
+                cur.execute(sql, (username, password))
+                validation = cur.fetchone()
+                if validation is None:
+                    return None
+            data = {"Validated": True, "login": username}
+            return data
 
         #else connexion CAS
         headerscas = {
