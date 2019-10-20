@@ -73,7 +73,7 @@ def login_cas():
         if data is None or not data.get("username") or not data.get("password"):
             raise ValueError
 
-        user = User.build_user_from_login(data["username"])
+        user = User.build_user_from_login(username=data["username"], tremplin=True)
         user_log = User.login(data["username"], data["password"])
 
         if not user_log.get("ticket"):
