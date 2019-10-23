@@ -26,5 +26,8 @@ CONSTANTS = {
         "5": 15517,
     },
     "food": 15513,
-    "pack_skiutc": 15508,
+    "pack_skiutc": {
+        "tremplin": 15551,
+        "etu": 15508
+    }
 }

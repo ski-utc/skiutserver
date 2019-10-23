@@ -24,9 +24,12 @@ class Paiement():
         if user_infos['tra_status'] == 'V':
             return (-1)
 
-        transaction_tickets = [
-            [cte['pack_skiutc'], 1],
-        ]
+        transaction_tickets = []
+
+        if len(user_infos['login']) > 9:
+            transaction_tickets.append([cte['pack_skiutc']['tremplin'], 1])
+        else:
+            transaction_tickets.append([cte['pack_skiutc']['etu'], 1])
 
         if user_infos['food'] is not 0: transaction_tickets.append([cte['food'], 1])
         if user_infos['assurance_annulation'] == 1: transaction_tickets.append([cte['assurance_annulation'], 1])
