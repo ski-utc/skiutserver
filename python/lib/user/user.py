@@ -1,7 +1,8 @@
 import requests
 from db import dbskiut_con
-from config.urls import _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
+from config.urls import _SALT, _SKIUTC_SERVICE, _CAS_URL, _GINGER_URL, _GINGER_KEY
 from requests.exceptions import HTTPError
+import xmltodict
 
 class User():
     """
@@ -9,7 +10,7 @@ class User():
     With the User object, you can retrieve any utc user with a login or an email
     """
 
-    def __init__(self, login=None, email=None):
+    def __init__(self, login=None, email=None, tremplin=False):
         self.email = email
         self.login = login
         self.user_info = ""
@@ -18,7 +19,7 @@ class User():
         self.cotisant = ""
         self.adult = None
         self.valid = True
-        if login is not None:
+        if login is not None and tremplin is False:
             self.get_user_info_ginger()
 
 
@@ -50,6 +51,20 @@ class User():
         :return: True if user is cotisant
         """
         return self.cotisant
+
+    def is_admin(self):
+        con = dbskiut_con()
+        with con:
+            cur = con.cursor()
+            sql = "SELECT * from auth WHERE login=%s"
+            cur.execute(sql, self.login)
+            user_info = cur.fetchone()
+            if user_info is None:
+                return False
+        if user_info["admin"] == 1:
+            return True
+        else:
+            return False
 
     def get_user_info(self):
         """
@@ -101,13 +116,13 @@ class User():
 
 
     @staticmethod
-    def build_user_from_login(username):
+    def build_user_from_login(username, tremplin=False):
         """
         Create a new User object
         :param username: login of user
         :return: User object
         """
-        return User(login=username)
+        return User(login=username, tremplin=tremplin)
 
     @staticmethod
     def build_user_from_email(email):
@@ -119,13 +134,25 @@ class User():
         return User(email=email)
 
     @staticmethod
-    def login(username=None, password=None):
+    def login(username=None, password=None, origin=None):
         """
         :param username: login
         :param password:
         :return: user information or login if not in skiutcs db
         """
-        #@TODO //Check BDD si user is tremplin, then login tremplin
+        #Check BDD si user is tremplin, then login tremplin
+
+        if(origin == "trmpln"):
+            con = dbskiut_con()
+            with con:
+                cur = con.cursor()
+                sql = "SELECT * from tremplin_2020 WHERE email=%s AND aes_decrypt(pwd,'"+_SALT+"')=aes_decrypt(aes_encrypt(%s,'"+_SALT+"'),'"+_SALT+"');"
+                cur.execute(sql, (username, password))
+                validation = cur.fetchone()
+                if validation is None:
+                    return None
+            data = {"Validated": True, "login": username}
+            return data
 
         #else connexion CAS
         headerscas = {
@@ -149,3 +176,30 @@ class User():
         data = {"ticket": st, "login": username}
 
         return data
+
+    @staticmethod
+    def validate_auth_ticket(service, ticket):
+        """
+        validation of the ticket from the cas in order to authenticate the user
+        """
+
+        headerscas = {
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Accept': 'text/plain',
+            'User-Agent': 'python'
+        }
+
+        paramscas = {
+            'service': service,
+            'ticket': ticket
+        }
+
+        response = requests.get(_CAS_URL, headers=headerscas, params=paramscas)
+        response = xmltodict.parse(response.text)
+
+        try:
+            username = response['cas:serviceResponse']['cas:authenticationSuccess']['cas:user']
+            return username
+
+        except Exception as e:
+            return None

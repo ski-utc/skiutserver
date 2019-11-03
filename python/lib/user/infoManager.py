@@ -14,10 +14,9 @@ class infoManager(User):
     """
     def __init__(self, login=None):
         super().__init__(login=login)
-        self._recap_user = None
         self._price = 0
-        self._key_infos = ["address", "zipcode", "tel", "city", "size", "weight", "shoesize", "transport", "transport-back",
-                     "food", "pack", "equipment", "items"]
+        self._key_infos = ["address", "zipcode", "tel", "email", "city", "size", "weight", "shoesize", "transport", "transport-back",
+                     "food", "pack", "equipment", "items", "assurance_annulation", "goodies"]
 
     def update_price(self, p):
         self._price += p
@@ -93,20 +92,23 @@ class infoManager(User):
         - transport-back ville depart (0,1)
 
         -- divers --
-        - food (avec porc, sans porc, sans)
+        - food (avec porc, sans porc, vege, sans)
         - assurance annul (0,1)
-        - assurance rapa (0,1)
         :return:
         """
         info = []
         for key in self._key_infos:
             info.append(kwargs[key])
-
+        price = self.get_total_price(kwargs)
+        #adding price to list
+        info.append(price)
+        #adding login
         info.append(self.get_login())
+        #tuppling
         info_tuple = tuple(info)
         sql = "UPDATE `users_2020` " \
-              "SET `address`=%s,`zipcode`=%s,`tel`=%s,`city`=%s,`size`=%s,`weight`=%s,`shoesize`=%s," \
-              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s " \
+              "SET `address`=%s,`zipcode`=%s,`tel`=%s, `email`=%s, `city`=%s, `size`=%s,`weight`=%s,`shoesize`=%s," \
+              "`transport`=%s,`transport-back`=%s,`food`=%s,`pack`=%s,`equipment`=%s,`items`=%s, `assurance_annulation`=%s, `goodies`=%s, `price`=%s " \
               "WHERE login=%s"
 
         con = dbskiut_con()
@@ -115,56 +117,100 @@ class infoManager(User):
             cur = con.cursor()
             try:
                 cur.execute(sql, info_tuple)
-
             except pymysql.err.InternalError as error:
                 code, message = error.args
                 print(">>>>>>>>>>>>>", code, message)
-                return False
+                return False, None
             except pymysql.err.IntegrityError as error:
                 code, message = error.args
                 print(">>>>>>>>>>>>>", code, message)
-                return False
+                return False, None
             con.commit()
-        return True
+        return True, price
 
-    def get_total_price(self):
+    def get_total_price(self, user_info):
         """
         :return: int total price of user with his options
         """
-        sql = "SELECT * FROM `users_2020`  WHERE `login`=%s"
-        con = dbskiut_con()
-        con.begin()
-        with con:
-            cur = con.cursor()
-            try:
-                cur.execute(sql, self.get_login())
-                self._recap_user = cur.fetchone()
-            except pymysql.err.InternalError as error:
-                code, message = error.args
-                print (">>>>>>>>>>>>>", code, message)
-            except pymysql.err.IntegrityError as error:
-                code, message = error.args
-                print (">>>>>>>>>>>>>", code, message)
-
         list_prices = file_to_json('meta/prices.json')
-        user_info = self.get_user_info()
         if user_info.get('type') == 0:
             self.update_price(list_prices["base_pack_etu"])
-        if user_info.get('food') == 1:
+        if int(user_info.get('food')) > 0:
             self.update_price(list_prices["food_pack"])
+        if int(user_info.get("goodies")) == 1:
+            self.update_price(list_prices["goodies"])
+        if int(user_info.get("assurance_annulation")) == 1:
+            self.update_price(list_prices["assurance_annulation"])
         """
         Packs neige now
         """
+        if int(user_info.get('pack')) == 4:
+            return self._price
         pack_switcher = PackSwitcher()
         items_switcher = ItemsSwitcher()
         pack = pack_switcher.numbers_to_packname(user_info.get('pack'))
         items = items_switcher.numbers_to_itemsname(user_info.get('items'))
         self.update_price(list_prices["packs"][pack][items])
-
+        print(list_prices["packs"][pack][items])
         return self._price
 
     def get_price_with_recap(self):
-        price = self.get_total_price()
         user_info = self.get_user_info()
+        return {"price": user_info["price"], "recap": user_info}
 
-        return {"price": price, "recap": user_info}
+    @staticmethod
+    def set_has_payed(login=None):
+        """
+        Set login in users_2020 db to payed
+        :return:
+        """
+        if not login:
+            return {"status": "FAILED"}
+        con = dbskiut_con()
+        con.begin()
+        with con:
+            cur = con.cursor()
+            try:
+                sql = "UPDATE `users_2020` SET `tra_status`=%s WHERE `login`=%s"
+                sql_tuples = ("V", login)
+                cur.execute(sql, sql_tuples)
+            except pymysql.err.InternalError as error:
+                code, message = error.args
+                print (">>>>>>>>>>>>>", code, message)
+                return {"status": "FAILED"}
+            except pymysql.err.IntegrityError as error:
+                code, message = error.args
+                print (">>>>>>>>>>>>>", code, message)
+                return {"status": "FAILED"}
+            con.commit()
+        return {"status": "SUCCESS"}
+
+    @staticmethod
+    def get_has_payed():
+        """
+        :return: List of status of payment for each user in users_2020
+        """
+        payed = []
+        unpayed = []
+        con = dbskiut_con()
+        con.begin()
+        with con:
+            cur = con.cursor()
+            try:
+                sql = "SELECT `login`, `price`, `tra_status` FROM `users_2020`"
+                cur.execute(sql)
+                list = cur.fetchall()
+                for user in list:
+                    if user["tra_status"] == "V":
+                        payed.append(user)
+                    else:
+                        unpayed.append(user)
+            except pymysql.err.InternalError as error:
+                code, message = error.args
+                print(">>>>>>>>>>>>>", code, message)
+                return {"status": "FAILED"}
+            except pymysql.err.IntegrityError as error:
+                code, message = error.args
+                print(">>>>>>>>>>>>>", code, message)
+                return {"status": "FAILED"}
+        return {"status": "SUCCESS", "has_payed": payed, "not_payed": unpayed}
