@@ -68,6 +68,16 @@ def add_batch():
     except Exception as e:
         return e
 
+@get('/tombola_batch')
+def get_batches():
+    '''route to get all batches'''
+    try:
+        response =  TombolaLots().get_batches()
+
+        return response
+    except Exception as e:
+        return e
+
 @delete('/tombola_batch')
 def delete_batch():
     '''route to delete a batch and return the new list with new orders'''

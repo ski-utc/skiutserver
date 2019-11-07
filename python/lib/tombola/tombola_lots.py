@@ -59,6 +59,29 @@ class TombolaLots():
             finally:
                 cur.close()
 
+    def get_batches(self):
+        """
+        get all batches
+        """
+
+        con = dbskiut_con()
+        con.begin()
+        with con:
+            try:
+                cur = con.cursor()
+                sql = "SELECT * from `tombola_2020_lots` ORDER BY `indice` ASC;"
+                cur.execute(sql)
+                con.commit()
+                response = cur.fetchall()
+
+                return json.dumps(response)
+            except Exception as e:
+                if con:
+                    con.rollback()
+                return e
+            finally:
+                cur.close()
+            
     def delete_batch(self, id):
         """
         delete a batch with its id
