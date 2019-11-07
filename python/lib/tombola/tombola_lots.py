@@ -45,17 +45,14 @@ class TombolaLots():
                     cur.execute(insert_sql, (name, indice + i))
                 con.commit()
 
-                get_all_batches = "SELECT * FROM `tombola_2020_lots` ORDER BY `indice` ASC;"
-                cur.execute(get_all_batches)
-                con.commit()
-                response = cur.fetchall()
-
-                return json.dumps(response)
+                return self.get_batches()
 
             except Exception as e:
                 if con:
                     con.rollback()
-                raise e
+                print(e)
+                return self.get_batches()
+
             finally:
                 cur.close()
 
@@ -81,7 +78,7 @@ class TombolaLots():
                 return e
             finally:
                 cur.close()
-            
+
     def delete_batch(self, id):
         """
         delete a batch with its id
@@ -110,24 +107,19 @@ class TombolaLots():
                 cur.execute(sql, order)
                 con.commit()
 
-                get_all_batches = "SELECT * FROM `tombola_2020_lots` ORDER BY `indice` ASC;"
-                cur.execute(get_all_batches)
-                con.commit()
-                response = cur.fetchall()
-
-                return json.dumps(response)
-
             except AttributeError:
-                return json.dumps({'error': 'batch allready won'})
+                 print({'error': 'batch allready won'})
 
             except Exception as e:
                 if con:
                     con.rollback()
                 error = json.dumps({'error': "an error occured"})
-                return error
+                print(error)
+
             finally:
                 cur.close()
-
+            return self.get_batches()
+            
     def update_batch(self, id, name):
         """
         update a batch with its id
@@ -151,15 +143,11 @@ class TombolaLots():
                 cur.execute(sql, (name, id))
                 con.commit()
 
-                get_all_batches = "SELECT * FROM `tombola_2020_lots` ORDER BY `indice` ASC;"
-                cur.execute(get_all_batches)
-                con.commit()
-                response = cur.fetchall()
-
-                return json.dumps(response)
+                return self.get_batches()
 
             except AttributeError:
-                return json.dumps({'error': 'batch allready won'})
+                print ({'error': 'batch allready won'})
+                return self.get_batches()
 
             except Exception as e:
                 if con:
@@ -186,13 +174,10 @@ class TombolaLots():
                 actual_indice = int(response['indice'])
                 indice = int(indice)
                 if indice > actual_indice:
-                    print('on entre bien la ')
                     others_sql = "UPDATE `tombola_2020_lots` SET `indice`= `indice` -1 WHERE `indice`> %s and `indice`<= %s;"
                     cur.execute(others_sql, (actual_indice, indice))
-                    print('premiere ok')
                     indice_sql = "UPDATE `tombola_2020_lots` SET `indice`=%s WHERE `id`=%s";
                     cur.execute(indice_sql, (indice, id))
-                    print('deuxieme ok')
                     con.commit()
 
 
@@ -204,21 +189,13 @@ class TombolaLots():
                     cur.execute(indice_sql, (indice, id))
                     con.commit()
 
-                get_all_batches = "SELECT * FROM `tombola_2020_lots` ORDER BY `indice` ASC;"
-                cur.execute(get_all_batches)
-                con.commit()
-                response = cur.fetchall()
-                return json.dumps(response)
-
-            except AttributeError:
-                return json.dumps({'error': 'batch allready won'})
+                return self.get_batches()
 
             except Exception as e:
                 if con:
                     con.rollback()
                 print(e)
-                error = json.dumps({'error': "an error occured"})
-                return error
+                return self.get_batches()
             finally:
                 cur.close()
 
