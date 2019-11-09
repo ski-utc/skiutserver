@@ -70,11 +70,18 @@ class TombolaLots():
                 cur.execute(sql)
                 con.commit()
                 response = cur.fetchall()
+                return_response = {}
+                count = 0
+                for value in response:
+                    return_response[count] = value
+                    count +=1
 
-                return json.dumps(response)
+                return json.loads(json.dumps(return_response))
             except Exception as e:
                 if con:
                     con.rollback()
+
+                print(e)
                 return e
             finally:
                 cur.close()
@@ -119,7 +126,7 @@ class TombolaLots():
             finally:
                 cur.close()
             return self.get_batches()
-            
+
     def update_batch(self, id, name):
         """
         update a batch with its id
