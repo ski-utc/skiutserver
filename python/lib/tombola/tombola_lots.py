@@ -110,7 +110,7 @@ class TombolaLots():
                 cur.execute(sql, id)
                 con.commit()
 
-                sql = "UPDATE `tombola_2020_lots` SET `indice`=`order`-1 WHERE `indice`>%s"
+                sql = "UPDATE `tombola_2020_lots` SET `indice`=`indice`-1 WHERE `indice`>%s"
                 cur.execute(sql, order)
                 con.commit()
 
