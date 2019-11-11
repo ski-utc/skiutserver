@@ -117,11 +117,11 @@ def update_batch(user = None):
         name = data.get('name')
         indice = data.get('indice')
 
-        if id and name:
+        if id is not None and name is not None:
             response = TombolaLots().update_batch(id, name)
             return response
 
-        if id and indice:
+        if id is not None and indice is not None:
             response = TombolaLots().change_indice(id, indice)
             return response
 
