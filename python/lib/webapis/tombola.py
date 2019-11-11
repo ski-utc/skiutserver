@@ -56,9 +56,13 @@ def tombola(user=None):
         return e
 
 @post('/tombola_batch')
-def add_batch():
+@authenticate
+def add_batch(user = None):
     '''route to create a batch'''
     try:
+        if not user.is_admin():
+            raise Exception('not admin.')
+
         data = json.loads(request.body.read())
         name = data.get('name', None)
         qte = data.get('qte', None)
@@ -66,12 +70,16 @@ def add_batch():
 
         return response
     except Exception as e:
-        return e
+        return json.dumps({'error': e})
 
 @get('/tombola_batch')
-def get_batches():
+@authenticate
+def get_batches(user = None):
     '''route to get all batches'''
     try:
+        if not user.is_admin():
+            raise Exception('not admin.')
+
         response =  TombolaLots().get_batches()
 
         return response
@@ -79,9 +87,13 @@ def get_batches():
         return e
 
 @delete('/tombola_batch')
-def delete_batch():
+@authenticate
+def delete_batch(user = None):
     '''route to delete a batch and return the new list with new orders'''
     try:
+        if not user.is_admin():
+            raise Exception('not admin.')
+
         data = json.loads(request.body.read())
         id = data.get('id')
 
@@ -93,9 +105,13 @@ def delete_batch():
         return e
 
 @patch('/tombola_batch')
-def update_batch():
+@authenticate
+def update_batch(user = None):
     '''route to update a batch and return the new list'''
     try:
+        if not user.is_admin():
+            raise Exception('not admin.')
+
         data = json.loads(request.body.read())
         id = data.get('id')
         name = data.get('name')
@@ -119,5 +135,13 @@ def update_batch():
 def play_tombola(user = None):
     try:
         return TombolaLots().get_win(user)
+    except Exception as e:
+        return e
+
+@get('/tombola_result')
+@authenticate
+def tombola_result(user = None):
+    try:
+        return TombolaLots().get_user_result(user)
     except Exception as e:
         return e
