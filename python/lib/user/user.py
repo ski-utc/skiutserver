@@ -19,9 +19,8 @@ class User():
         self.cotisant = ""
         self.adult = None
         self.valid = True
-        if login is not None and tremplin is False:
-            self.get_user_info_ginger()
-
+        #if login is not None and tremplin is False:
+            #self.get_user_info_ginger()
 
     def is_valid(self):
         """

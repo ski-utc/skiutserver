@@ -70,7 +70,6 @@ class Tombola():
             cur.execute(sql, (user.get_login(), 'V'))
             con.commit()
             response = cur.fetchone()
-
             for k, v in response.items():
                 if v is None:
                     response[k] = 0
@@ -79,13 +78,13 @@ class Tombola():
                 'ticket1': int(response['ticket1']),
                 'ticket5': int(response['ticket5']),
                 'ticket10': int(response['ticket10']),
-                'poids': int(self.get_poids(user))
+                'total_tickets': int(self.get_total_tickets())
             }
         except Exception as e:
             raise e
         finally:
             cur.close()
-        return json.dumps(response)
+        return json.loads(json.dumps(response))
 
     def validate_tombola(self, user):
         con = dbskiut_con()
@@ -131,11 +130,6 @@ class Tombola():
         con = dbskiut_con()
         con.begin()
         try:
-            cur = con.cursor()
-            sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM tombola_2020 WHERE `status`=%s"
-            cur.execute(sql, 'V')
-            con.commit()
-            total_tickets = cur.fetchone()
             sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM tombola_2020 WHERE `login_user`=%s AND `status`=%s"
             cur.execute(sql, (user.get_login(), 'V'))
             con.commit()
@@ -148,7 +142,22 @@ class Tombola():
         if user_tickets is None:
             user_tickets = 0
 
-        if total_tickets is None:
-            total_tickets = 0
+        return int(user_tickets['value'])/self.get_total_tickets()
 
-        return int(user_tickets['value'])/total_tickets['value']
+    def get_total_tickets(self):
+        con = dbskiut_con()
+        con.begin()
+        try:
+            cur = con.cursor()
+            sql = "SELECT SUM(`ticket1` + 5*`ticket5` + 10*`ticket10`) as value FROM `tombola_2020` WHERE `status`=%s"
+            cur.execute(sql, 'V')
+            con.commit()
+            total_tickets = cur.fetchone()
+        except Exception as e:
+            raise e
+        finally:
+            cur.close()
+        if total_tickets is None or total_tickets['value'] is None:
+            total_tickets = { 'value': 0 }
+
+        return int(total_tickets['value'])
