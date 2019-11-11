@@ -84,7 +84,7 @@ class Tombola():
             raise e
         finally:
             cur.close()
-        return json.dumps(response)
+        return json.loads(json.dumps(response))
 
     def validate_tombola(self, user):
         con = dbskiut_con()

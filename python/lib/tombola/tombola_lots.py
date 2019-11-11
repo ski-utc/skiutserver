@@ -223,7 +223,7 @@ class TombolaLots():
         """
         try:
             user_stats = Tombola().get_user_stats(user)
-            user_stats = json.loads(user_stats)
+            
 
             total_tickets = user_stats['total_tickets']
             user_tickets = user_stats['ticket1'] + 5*user_stats['ticket5'] + 10*user_stats['ticket10']
@@ -231,7 +231,6 @@ class TombolaLots():
             if user_tickets == 0:
                 raise AttributeError
 
-            print(f'Cet utilisateur a: {user_tickets} tickets. Il y a en tout {total_tickets}')
             con = dbskiut_con()
             con.begin()
             with con:
@@ -254,16 +253,15 @@ class TombolaLots():
                         win = batches[best]
                     except:
                         win = None
-
                     # insert user login in the tombola_2020_lots
                     if win is not None:
                         win_id = win.get('id')
                         sql = "UPDATE `tombola_2020_lots` SET `winner`=%s WHERE `id`=%s;"
                         cur.execute(sql, (user.get_login(), win_id))
-                        result = {'tombola_result': win}
+                        result = {'lot': win['name']}
                     # return 0 value for loosers
                     else:
-                        result = {'tombola_result': 0}
+                        result = {'lot': None}
 
                     # delete all user batches
                     sql = "DELETE FROM `tombola_2020` WHERE `login_user`=%s;"
@@ -272,12 +270,12 @@ class TombolaLots():
                     # Here we commit for the UPDATE and the DELETE
                     # if an error occure all will be rollback to avoid problems
                     con.commit()
-
-                    return json.dumps(result)
+                    return json.loads(json.dumps(result))
 
                 except Exception as e:
                     if con:
                         con.rollback()
+
                     raise e
                 finally:
                     cur.close()
@@ -286,4 +284,29 @@ class TombolaLots():
             return json.dumps({'error': 'User has no available tickets.'})
 
         except Exception as e:
+            print(e)
             return e
+
+    def get_user_result(self, user):
+        try:
+            con = dbskiut_con()
+            con.begin()
+            with con:
+                try:
+                    cur = con.cursor()
+                    # get all availables batches
+                    sql = "SELECT * FROM `tombola_2020_lots` WHERE `winner`=%s;"
+                    cur.execute(sql, (user.get_login()))
+                    con.commit()
+                    win = cur.fetchone()
+
+                    if win is None:
+                        return json.loads(json.dumps({"lot": None}))
+                    return json.loads(json.dumps({"lot": win['name']}))
+                except Exception as e:
+                    raise e
+
+        except Exception as e:
+            return json.loads(json.dumps({"error": e}))
+        finally:
+            cur.close()
